@@ -14,14 +14,16 @@ interface TransactionState {
   transactions: Transaction[]
   currentTransaction: Transaction | null
   status: 'idle' | 'loading' | 'failed'
-  error: string | null
+  error: string | null,
+  currentStep: 'product' | 'summary' | 'result'
 }
 
 const initialState: TransactionState = {
   transactions: [],
   currentTransaction: null,
   status: 'idle',
-  error: null
+  error: null,
+  currentStep: 'product'
 }
 
 export const transactionSlice = createSlice({
@@ -59,6 +61,9 @@ export const transactionSlice = createSlice({
     },
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload
+    },
+    setCurrentStep: (state, action: PayloadAction<'product' | 'summary' | 'result'>) => {
+      state.currentStep = action.payload
     }
   }
 })

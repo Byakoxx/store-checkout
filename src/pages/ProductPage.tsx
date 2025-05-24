@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { ShoppingCart } from "lucide-react"
 import { Button } from '../components/ui/Button'
@@ -7,15 +7,8 @@ import { RootState } from '../app/store'
 import { setProducts, setStatus } from '../features/product/productSlice'
 import { ProductSkeleton } from '../components/ProductSkeleton'
 import { StockDisplay } from '../components/ui/StockDisplay'
-
-interface Product {
-  id: string
-  name: string
-  price: number
-  stock: number
-  image: string
-  description?: string
-}
+import PaymentModal from './PaymentModal'
+import { Product } from '../types/product'
 
 // Simulación de datos de API
 const mockProducts: Product[] = [
@@ -30,9 +23,19 @@ const mockProducts: Product[] = [
 ]
 
 export const ProductPage: React.FC = () => {
+
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false)
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+
+
   const dispatch = useDispatch()
   const products = useSelector((state: RootState) => state.product.products)
   const status = useSelector((state: RootState) => state.product.status)
+
+  const handlePaymentClick = (product: Product) => {
+    setSelectedProduct(product)
+    setIsPaymentModalOpen(true)
+  }
 
   useEffect(() => {
     // Simular carga de API
@@ -71,7 +74,7 @@ export const ProductPage: React.FC = () => {
                 <StockDisplay stock={product.stock} />
                 <Button
                   className="w-full bg-foreground text-background py-4 px-6 rounded-2xl font-medium hover:bg-muted transition-colors"
-                  onClick={() => console.log('Pagar con tarjeta de crédito:', product.id)}
+                  onClick={() => handlePaymentClick(product.id as unknown as Product)}
                 >
                   <ShoppingCart className="mr-2 h-5 w-5" />
                   Pagar con tarjeta de crédito
@@ -84,6 +87,17 @@ export const ProductPage: React.FC = () => {
           © {new Date().getFullYear()} PayFlow Store. Todos los derechos reservados.
         </div>
       </div>
+
+      {selectedProduct && (
+        <PaymentModal
+          isOpen={isPaymentModalOpen}
+          onClose={() => {
+            setIsPaymentModalOpen(false)
+            setSelectedProduct(null)
+          }}
+          product={selectedProduct}
+        />
+      )}
     </div>
   )
 }
