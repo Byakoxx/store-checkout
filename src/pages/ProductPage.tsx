@@ -5,6 +5,8 @@ import { Button } from '../components/ui/Button'
 import { Card, CardContent } from '../components/ui/Card'
 import { RootState } from '../app/store'
 import { setProducts, setStatus } from '../features/product/productSlice'
+import { ProductSkeleton } from '../components/ProductSkeleton'
+import { StockDisplay } from '../components/ui/StockDisplay'
 
 interface Product {
   id: string
@@ -43,11 +45,7 @@ export const ProductPage: React.FC = () => {
   }, [dispatch])
 
   if (status === 'loading') {
-    return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <p className="text-lg text-muted-foreground">Cargando productos...</p>
-      </div>
-    )
+    return <ProductSkeleton />
   }
 
   return (
@@ -70,9 +68,7 @@ export const ProductPage: React.FC = () => {
                   <span className="text-2xl font-bold text-primary">${product.price}</span>
                 </div>
                 <p className="text-muted-foreground text-sm mb-4">{product.description}</p>
-                <div className="text-primary text-sm font-medium mb-6">
-                  {product.stock} unidades disponibles
-                </div>
+                <StockDisplay stock={product.stock} />
                 <Button
                   className="w-full bg-foreground text-background py-4 px-6 rounded-2xl font-medium hover:bg-muted transition-colors"
                   onClick={() => console.log('Pagar con tarjeta de crédito:', product.id)}
