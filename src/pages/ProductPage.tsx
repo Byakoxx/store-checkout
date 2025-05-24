@@ -1,8 +1,10 @@
-import React from 'react'
-
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { ShoppingCart } from "lucide-react"
 import { Button } from '../components/ui/Button'
 import { Card, CardContent } from '../components/ui/Card'
+import { RootState } from '../app/store'
+import { setProducts, setStatus } from '../features/product/productSlice'
 
 interface Product {
   id: string
@@ -13,6 +15,7 @@ interface Product {
   description?: string
 }
 
+// Simulación de datos de API
 const mockProducts: Product[] = [
   {
     id: '1',
@@ -25,12 +28,34 @@ const mockProducts: Product[] = [
 ]
 
 export const ProductPage: React.FC = () => {
+  const dispatch = useDispatch()
+  const products = useSelector((state: RootState) => state.product.products)
+  const status = useSelector((state: RootState) => state.product.status)
+
+  useEffect(() => {
+    // Simular carga de API
+    dispatch(setStatus('loading'))
+    // Simular delay de red
+    setTimeout(() => {
+      dispatch(setProducts(mockProducts))
+      dispatch(setStatus('idle'))
+    }, 1000)
+  }, [dispatch])
+
+  if (status === 'loading') {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <p className="text-lg text-muted-foreground">Cargando productos...</p>
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-md mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold text-foreground mb-8 text-center">PayFlow Store</h1>
         <Card className="grid gap-8 bg-white p-5 shadow-2xl">
-          {mockProducts.map((product) => (
+          {products.map((product) => (
             <div key={product.id} className="bg-card rounded-lg overflow-hidden max-w-sm mx-auto">
               <div className="aspect-square bg-secondary flex items-center justify-center">
                 <img
