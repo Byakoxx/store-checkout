@@ -8,8 +8,8 @@ import PaymentModal from './PaymentModal';
 import { Product } from '../types/product';
 import { Button } from '../components/ui/Button';
 import { Card, CardContent } from '../components/ui/Card';
-import { StockDisplay } from '../components/ui/StockDisplay';
-import { ProductSkeleton } from '../components/ProductSkeleton';
+import StockDisplay from '../components/ui/StockDisplay';
+import ProductSkeleton from '../components/ProductSkeleton';
 import { setProducts, setStatus } from '../features/product/productSlice';
 
 // Simulación de datos de API
@@ -29,6 +29,7 @@ export const ProductPage: React.FC = () => {
   // State
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [modalShouldRender, setModalShouldRender] = useState(false);
 
 
   // Selectors
@@ -42,6 +43,16 @@ export const ProductPage: React.FC = () => {
   const handlePaymentClick = (product: Product) => {
     setSelectedProduct(product);
     setIsPaymentModalOpen(true);
+    setModalShouldRender(true);
+  };
+
+  const handleModalClose = () => {
+    setIsPaymentModalOpen(false);
+  };
+
+  const handleModalExited = () => {
+    setModalShouldRender(false);
+    setSelectedProduct(null);
   };
 
   useEffect(() => {
@@ -95,13 +106,11 @@ export const ProductPage: React.FC = () => {
         </div>
       </div>
 
-      {selectedProduct && (
+      {modalShouldRender && selectedProduct && (
         <PaymentModal
           isOpen={isPaymentModalOpen}
-          onClose={() => {
-            setIsPaymentModalOpen(false)
-            setSelectedProduct(null)
-          }}
+          onClose={handleModalClose}
+          onExited={handleModalExited}
           product={selectedProduct}
         />
       )}

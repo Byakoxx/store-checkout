@@ -2,23 +2,25 @@ import { useEffect, useState } from "react";
 
 import { X } from "lucide-react";
 
+import { cn } from "../utils/utils";
 import { Product } from "../types/product";
 import { Button } from "../components/ui/Button";
 import { usePaymentForm } from "../hooks/usePaymentForm";
 import { PaymentFormData } from "../types/payment.types";
 import { processPayment } from "../services/payment.service";
-import { CVVField } from "../components/forms/payment/CVVField";
-import { CardNameField } from "../components/forms/payment/CardNameField";
-import { CardNumberField } from "../components/forms/payment/CardNumberField";
-import { ExpiryDateField } from "../components/forms/payment/ExpiryDateField";
+import CVVField from "../components/forms/payment/CVVField";
+import CardNameField from "../components/forms/payment/CardNameField";
+import CardNumberField from "../components/forms/payment/CardNumberField";
+import ExpiryDateField from "../components/forms/payment/ExpiryDateField";
 
 interface PaymentModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onExited: () => void;
   product: Product;
 }
 
-const PaymentModal = ({ isOpen, onClose, product }: PaymentModalProps) => {
+const PaymentModal = ({ isOpen, onClose, onExited, product }: PaymentModalProps) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [show, setShow] = useState(isOpen);
   const [animation, setAnimation] = useState("in");
@@ -57,14 +59,23 @@ const PaymentModal = ({ isOpen, onClose, product }: PaymentModalProps) => {
       setAnimation("in");
     } else if (show) {
       setAnimation("out");
-      setTimeout(() => setShow(false), 300);
+      const timeout = setTimeout(() => {
+        setShow(false);
+        onExited();
+      }, 300);
+      return () => clearTimeout(timeout);
     }
   }, [isOpen]);
 
   if (!show) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
+    <div
+      className={cn(
+        "fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center fade-in animate-in  justify-center p-4 transition-opacity duration-300",
+        animation === "in" ? "opacity-100" : "opacity-0"
+      )}
+    >
       <div className="bg-white rounded-xl shadow-xl w-full max-w-md max-h-[90vh] overflow-auto">
         {/* HEADER */}
         <div className="flex items-center justify-between p-4 border-b">
