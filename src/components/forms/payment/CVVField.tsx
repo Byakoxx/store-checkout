@@ -1,5 +1,7 @@
 import { InputHTMLAttributes } from 'react';
+
 import { UseFormRegister } from 'react-hook-form';
+
 import { PaymentFormData } from '../../../types/payment.types';
 
 interface CVVFieldProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -7,7 +9,7 @@ interface CVVFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: string;
 }
 
-export const CVVField = ({
+const CVVField = ({
   register,
   error,
   ...props
@@ -34,3 +36,5 @@ export const CVVField = ({
     </div>
   );
 };
+
+export default CVVField;

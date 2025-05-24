@@ -1,5 +1,7 @@
 import { InputHTMLAttributes } from 'react';
+
 import { UseFormRegister } from 'react-hook-form';
+
 import { PaymentFormData } from '../../../types/payment.types';
 
 interface CardNumberFieldProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -8,7 +10,7 @@ interface CardNumberFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   formatCardNumber: (value: string) => string;
 }
 
-export const CardNumberField = ({
+const CardNumberField = ({
   register,
   error,
   formatCardNumber,
@@ -41,3 +43,5 @@ export const CardNumberField = ({
     </div>
   );
 };
+
+export default CardNumberField;

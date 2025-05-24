@@ -1,9 +1,9 @@
-import { useSelector } from "react-redux"
+import { useSelector } from "react-redux";
 
-import { RootState } from "./app/store"
-import ResultPage from "./pages/ResultPage"
-import ProductPage from "./pages/ProductPage"
-import SummaryBackdrop from "./pages/SummaryBackdrop"
+import { RootState } from "./app/store";
+import ResultPage from "./pages/ResultPage";
+import ProductPage from "./pages/ProductPage";
+import SummaryBackdrop from "./pages/SummaryBackdrop";
 
 function App() {
 

@@ -4,7 +4,7 @@ export interface PaymentResponse {
   success: boolean;
   transactionId?: string;
   error?: string;
-}
+};
 
 export const processPayment = async (
   paymentData: PaymentFormData

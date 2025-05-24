@@ -1,14 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { ShoppingCart } from "lucide-react"
-import { Button } from '../components/ui/Button'
-import { Card, CardContent } from '../components/ui/Card'
-import { RootState } from '../app/store'
-import { setProducts, setStatus } from '../features/product/productSlice'
-import { ProductSkeleton } from '../components/ProductSkeleton'
-import { StockDisplay } from '../components/ui/StockDisplay'
-import PaymentModal from './PaymentModal'
-import { Product } from '../types/product'
+import React, { useEffect, useState } from 'react';
+
+import { ShoppingCart } from "lucide-react";
+import { useDispatch, useSelector } from 'react-redux';
+
+import { RootState } from '../app/store';
+import PaymentModal from './PaymentModal';
+import { Product } from '../types/product';
+import { Button } from '../components/ui/Button';
+import { Card, CardContent } from '../components/ui/Card';
+import { StockDisplay } from '../components/ui/StockDisplay';
+import { ProductSkeleton } from '../components/ProductSkeleton';
+import { setProducts, setStatus } from '../features/product/productSlice';
 
 // Simulación de datos de API
 const mockProducts: Product[] = [
@@ -20,36 +22,41 @@ const mockProducts: Product[] = [
     image: 'https://via.placeholder.com/400',
     description: 'Auriculares inalámbricos con cancelación de ruido, batería de larga duración y sonido de alta fidelidad. Perfectos para trabajo y ocio.'
   }
-]
+];
 
 export const ProductPage: React.FC = () => {
 
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false)
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
+  // State
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
 
-  const dispatch = useDispatch()
-  const products = useSelector((state: RootState) => state.product.products)
-  const status = useSelector((state: RootState) => state.product.status)
+  // Selectors
+  const products = useSelector((state: RootState) => state.product.products);
+  const status = useSelector((state: RootState) => state.product.status);
 
+  // Dispatch
+  const dispatch = useDispatch();
+
+  // Handlers
   const handlePaymentClick = (product: Product) => {
-    setSelectedProduct(product)
-    setIsPaymentModalOpen(true)
-  }
+    setSelectedProduct(product);
+    setIsPaymentModalOpen(true);
+  };
 
   useEffect(() => {
     // Simular carga de API
-    dispatch(setStatus('loading'))
+    dispatch(setStatus('loading'));
     // Simular delay de red
     setTimeout(() => {
-      dispatch(setProducts(mockProducts))
-      dispatch(setStatus('idle'))
-    }, 1000)
-  }, [dispatch])
+      dispatch(setProducts(mockProducts));
+      dispatch(setStatus('idle'));
+    }, 1000);
+  }, [dispatch]);
 
   if (status === 'loading') {
-    return <ProductSkeleton />
-  }
+    return <ProductSkeleton />;
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -99,7 +106,7 @@ export const ProductPage: React.FC = () => {
         />
       )}
     </div>
-  )
-}
+  );
+};
 
-export default ProductPage
+export default ProductPage;

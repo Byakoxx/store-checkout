@@ -22,7 +22,9 @@ export const paymentSchema = z.object({
     .string()
     .min(3, 'El nombre debe tener al menos 3 caracteres')
     .max(50, 'El nombre debe tener menos de 50 caracteres')
-    .regex(/^[a-zA-Z\s]*$/, 'El nombre solo debe contener letras y espacios'),
+    .refine((val) => /^[a-zA-ZáéíóúñÁÉÍÓÚÑ\s]*$/.test(val), {
+      message: 'El nombre solo debe contener letras y espacios',
+    }),
   expiryDate: z
     .string()
     .regex(/^(0[1-9]|1[0-2])\/([0-9]{2})$/, 'Formato de fecha inválido (MM/AA)')

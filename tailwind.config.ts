@@ -60,10 +60,15 @@ export default {
         "fade-in": {
           "0%": { opacity: "0" },
           "100%": { opacity: "1" }
+        },
+        "fade-out": {
+          "0%": { opacity: "1" },
+          "100%": { opacity: "0" }
         }
       },
       animation: {
         "in": "fade-in 0.3s ease-in",
+        "out": "fade-out 0.3s ease-out"
       }
     },
   },

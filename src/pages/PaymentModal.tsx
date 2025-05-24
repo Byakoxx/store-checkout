@@ -1,40 +1,45 @@
-import { X } from "lucide-react"
-import { Product } from "../types/product"
-import { Button } from "../components/ui/Button"
-import { usePaymentForm } from "../hooks/usePaymentForm"
-import { CardNumberField } from "../components/forms/payment/CardNumberField"
-import { CardNameField } from "../components/forms/payment/CardNameField"
-import { ExpiryDateField } from "../components/forms/payment/ExpiryDateField"
-import { CVVField } from "../components/forms/payment/CVVField"
-import { processPayment } from "../services/payment.service"
-import { useState } from "react"
-import { PaymentFormData } from "../types/payment.types"
+import { useEffect, useState } from "react";
+
+import { X } from "lucide-react";
+
+import { Product } from "../types/product";
+import { Button } from "../components/ui/Button";
+import { usePaymentForm } from "../hooks/usePaymentForm";
+import { PaymentFormData } from "../types/payment.types";
+import { processPayment } from "../services/payment.service";
+import { CVVField } from "../components/forms/payment/CVVField";
+import { CardNameField } from "../components/forms/payment/CardNameField";
+import { CardNumberField } from "../components/forms/payment/CardNumberField";
+import { ExpiryDateField } from "../components/forms/payment/ExpiryDateField";
 
 interface PaymentModalProps {
-  isOpen: boolean
-  onClose: () => void
-  product: Product
+  isOpen: boolean;
+  onClose: () => void;
+  product: Product;
 }
 
 const PaymentModal = ({ isOpen, onClose, product }: PaymentModalProps) => {
-  const [isProcessing, setIsProcessing] = useState(false)
+  const [isProcessing, setIsProcessing] = useState(false);
+  const [show, setShow] = useState(isOpen);
+  const [animation, setAnimation] = useState("in");
+
   const {
     register,
     handleSubmit,
     errors,
     formatCardNumber,
     formatExpiryDate,
-  } = usePaymentForm()
+  } = usePaymentForm();
 
   const onSubmit = async (data: PaymentFormData) => {
     try {
-      setIsProcessing(true)
-      const response = await processPayment(data)
+      setIsProcessing(true);
+      const response = await processPayment(data);
 
       if (response.success) {
         // Aquí puedes manejar el éxito del pago
-        console.log('Pago exitoso:', response.transactionId)
-        onClose()
+        console.log('Pago exitoso:', response.transactionId);
+        onClose();
       } else {
         // Aquí puedes manejar el error del pago
         console.error('Error en el pago:', response.error)
@@ -42,11 +47,21 @@ const PaymentModal = ({ isOpen, onClose, product }: PaymentModalProps) => {
     } catch (error) {
       console.error('Error al procesar el pago:', error)
     } finally {
-      setIsProcessing(false)
+      setIsProcessing(false);
     }
-  }
+  };
 
-  if (!isOpen) return null
+  useEffect(() => {
+    if (isOpen) {
+      setShow(true);
+      setAnimation("in");
+    } else if (show) {
+      setAnimation("out");
+      setTimeout(() => setShow(false), 300);
+    }
+  }, [isOpen]);
+
+  if (!show) return null;
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 animate-in fade-in duration-300">
@@ -99,6 +114,6 @@ const PaymentModal = ({ isOpen, onClose, product }: PaymentModalProps) => {
       </div>
     </div>
   )
-}
+};
 
-export default PaymentModal
+export default PaymentModal;

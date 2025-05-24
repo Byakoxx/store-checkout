@@ -1,4 +1,4 @@
-export function ProductSkeleton() {
+const ProductSkeleton = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-md mx-auto px-4 py-8">
@@ -32,5 +32,7 @@ export function ProductSkeleton() {
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
+
+export default ProductSkeleton;

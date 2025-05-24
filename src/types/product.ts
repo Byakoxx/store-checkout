@@ -5,4 +5,4 @@ export interface Product {
   stock: number
   image?: string
   description?: string
-}
+};

@@ -8,6 +8,6 @@ const ResultPage = () => {
     </div>
   )
 
-}
+};
 
-export default ResultPage
+export default ResultPage;
