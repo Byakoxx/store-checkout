@@ -24,7 +24,7 @@ function App() {
   });
 
   if (currentStep === 'result') {
-    return <ResultPage isProcessing={true} />;
+    return <ResultPage isProcessing={false} onContinue={() => {}} result="success" />;
   }
 
   return (

@@ -1,10 +1,17 @@
+import { motion } from "framer-motion";
+import { Home, XCircle, CheckCircle2 } from "lucide-react";
+
 import logo from "../assets/svg/logo.svg";
+import { Button } from "../components/ui/Button";
 
 interface ResultPageProps {
   isProcessing: boolean;
+  result: "success" | "error";
+  onContinue: () => void;
 }
 
-const ResultPage = ({ isProcessing = true }: ResultPageProps) => {
+const ResultPage = ({ isProcessing = true, result = "success", onContinue }: ResultPageProps) => {
+  const isSuccess = result === "success"
 
   if(isProcessing) {
     return (
@@ -23,13 +30,34 @@ const ResultPage = ({ isProcessing = true }: ResultPageProps) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 relative">
-      <div className="max-w-md mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-foreground mb-8 text-center">Payment successful</h1>
-      </div>
+    <div className="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center p-4">
+      <motion.div
+        initial={{ scale: 0.8, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="flex flex-col items-center text-center max-w-md"
+      >
+        {isSuccess ? (
+          <CheckCircle2 className="h-24 w-24 text-emerald-500 mb-6" />
+        ) : (
+          <XCircle className="h-24 w-24 text-red-500 mb-6" />
+        )}
+
+        <h1 className="text-2xl font-bold mb-2">{isSuccess ? "Payment successful" : "Payment failed"}</h1>
+
+        <p className="text-gray-600 mb-8">
+          {isSuccess
+            ? "Your order has been processed correctly. You will receive an email with the details of your purchase."
+            : "An error occurred while processing your payment. Please try again or use another payment method."}
+        </p>
+
+        <Button onClick={onContinue} className="w-full py-6 text-lg" variant={isSuccess ? "default" : "outline"}>
+          <Home className="mr-2 h-5 w-5" />
+          {isSuccess ? "Return to the store" : "Try again"}
+        </Button>
+      </motion.div>
     </div>
   )
-
 };
 
 export default ResultPage;
