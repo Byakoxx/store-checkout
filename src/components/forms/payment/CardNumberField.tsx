@@ -2,9 +2,8 @@ import { InputHTMLAttributes, useMemo, useState } from 'react';
 import { UseFormRegister, UseFormSetValue } from 'react-hook-form';
 
 import { PaymentFormData } from '../../../schemas/payment.schema';
-import visaLogo from '../../../assets/visa.svg';
-import mcLogo from '../../../assets/mastercard.svg';
-import amexLogo from '../../../assets/amex.svg';
+import { CARD_LOGOS, detectCardType } from '../../../utils/cardUtils';
+
 
 interface CardNumberFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   register: UseFormRegister<PaymentFormData>;
@@ -14,17 +13,6 @@ interface CardNumberFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   value: string;
 }
 
-const CARD_PATTERNS = {
-  visa: /^4[0-9]{0,}/,
-  mastercard: /^5[1-5][0-9]{0,}/,
-  amex: /^3[47][0-9]{0,}/,
-};
-
-const CARD_LOGOS: Record<string, string> = {
-  visa: visaLogo,
-  mastercard: mcLogo,
-  amex: amexLogo,
-};
 
 const maskCardNumber = (value: string) => {
   return value.replace(/\d/g, '*');
@@ -40,13 +28,7 @@ const CardNumberField = ({
 }: CardNumberFieldProps) => {
   const [isFocused, setIsFocused] = useState(false);
 
-  const cardType = useMemo(() => {
-    const val = typeof value === 'string' ? value.replace(/\s+/g, '') : '';
-    if (CARD_PATTERNS.amex.test(val)) return 'amex';
-    if (CARD_PATTERNS.visa.test(val)) return 'visa';
-    if (CARD_PATTERNS.mastercard.test(val)) return 'mastercard';
-    return null;
-  }, [value]);
+  const cardType = useMemo(() => detectCardType(value), [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let raw = e.target.value.replace(/\D/g, '');
