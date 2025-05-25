@@ -24,7 +24,7 @@ export function useBackdropTransition({ setFrontLayerState }: UseBackdropTransit
 
   const handleConfirm = () => {
     setFrontLayerState('revealed');
-    setPendingStep('summary');
+    setPendingStep('result');
   };
 
   const handleCloseSummary = () => {
@@ -36,4 +36,4 @@ export function useBackdropTransition({ setFrontLayerState }: UseBackdropTransit
     handleConfirm,
     handleCloseSummary,
   };
-} 
+}

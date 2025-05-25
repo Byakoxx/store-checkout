@@ -1,22 +1,20 @@
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { X } from "lucide-react";
+import { ArrowLeft, X } from "lucide-react";
 
 import { cn } from "../utils/utils";
+import { RootState } from "../app/store";
 import { Product } from "../types/product";
 import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/Button";
 import { usePaymentForm } from "../hooks/usePaymentForm";
 import { PaymentFormData } from "../types/payment.types";
 import CVVField from "../components/forms/payment/CVVField";
-import { processPayment } from "../services/payment.service";
 import { setPaymentForm } from "../features/payment/paymentSlice";
 import CardNameField from "../components/forms/payment/CardNameField";
 import CardNumberField from "../components/forms/payment/CardNumberField";
 import ExpiryDateField from "../components/forms/payment/ExpiryDateField";
-import { setCurrentStep } from "../features/transaction/transactionSlice";
-import { RootState } from "../app/store";
 
 interface PaymentBackdropProps {
   isOpen: boolean;
@@ -32,7 +30,6 @@ interface PaymentBackdropProps {
 const PaymentBackdrop = ({ isOpen, onClose, onExited, product, frontLayerState, onExpand, onReveal, onContinue }: PaymentBackdropProps) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [show, setShow] = useState(isOpen);
-  const [animation, setAnimation] = useState("in");
 
   const dispatch = useDispatch();
   const paymentForm = useSelector((state: RootState) => state.payment.form);
@@ -50,7 +47,7 @@ const PaymentBackdrop = ({ isOpen, onClose, onExited, product, frontLayerState, 
 
   const onSubmit = async (data: PaymentFormData) => {
     setIsProcessing(true);
-    dispatch(setPaymentForm(data));
+    dispatch(setPaymentForm({ ...data, product }));
     onContinue();
     setIsProcessing(false);
   };
@@ -59,9 +56,7 @@ const PaymentBackdrop = ({ isOpen, onClose, onExited, product, frontLayerState, 
   useEffect(() => {
     if (isOpen) {
       setShow(true);
-      setAnimation("in");
     } else if (show) {
-      setAnimation("out");
       const timeout = setTimeout(() => {
         setShow(false);
         onExited();
@@ -88,11 +83,16 @@ const PaymentBackdrop = ({ isOpen, onClose, onExited, product, frontLayerState, 
       />
       {/* HEADER */}
       <div className="flex items-center justify-between mb-4">
-        <button className="text-gray-500 hover:text-gray-800 font-medium" onClick={onClose} aria-label="Atrás">
-          ← Back
-        </button>
-        <h2 className="text-xl font-semibold flex-1 text-center">Payment information</h2>
-        <span className="w-8" /> {/* Espaciador para centrar el título */}
+        <h2 className="text-xl font-semibold flex-1 text-left">Payment information</h2>
+        <Button
+          variant="ghost"
+          className="text-gray-500 flex items-center hover:text-gray-800 font-medium mr-2"
+          onClick={onClose}
+          aria-label="Back"
+        >
+          <ArrowLeft className="h-4 w-4 mr-1" />
+          Back
+        </Button>
       </div>
       {/* BODY */}
       <form onSubmit={handleSubmit(onSubmit)} className="p-0 space-y-4">

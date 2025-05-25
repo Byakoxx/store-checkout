@@ -4,7 +4,6 @@ import { useSelector, useDispatch } from "react-redux";
 
 import { RootState } from "../app/store";
 import { Product } from "../types/product";
-import { clearPaymentForm } from "../features/payment/paymentSlice";
 import { setCurrentStep } from "../features/transaction/transactionSlice";
 
 export function useBackdropFlow() {
@@ -54,14 +53,6 @@ export function useBackdropFlow() {
   };
   const handleExpand = () => setFrontLayerState('expanded');
   const handleReveal = () => setFrontLayerState('revealed');
-  const handleCancelFlow = () => {
-    setFrontLayerState('revealed');
-    setTimeout(() => {
-      dispatch(setCurrentStep('product'));
-      setSelectedProduct(null);
-      dispatch(clearPaymentForm());
-    }, 300);
-  };
 
   return {
     currentStep,
@@ -75,7 +66,6 @@ export function useBackdropFlow() {
     handleConfirm,
     handleExpand,
     handleReveal,
-    handleCancelFlow,
     setFrontLayerState,
   };
 }

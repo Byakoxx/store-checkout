@@ -1,12 +1,12 @@
-import visaLogo from '../assets/visa.svg';
-import mcLogo from '../assets/mastercard.svg';
-import amexLogo from '../assets/amex.svg';
-import discoverLogo from '../assets/discover.svg';
-import dinersLogo from '../assets/diners.svg';
-import jcbLogo from '../assets/jcb.svg';
-import unionpayLogo from '../assets/unionpay.svg';
-import mirLogo from '../assets/mir.svg';
-import maestroLogo from '../assets/maestro.svg';
+import visaLogo from '../assets/svg/cards/visa.svg';
+import mcLogo from '../assets/svg/cards/mastercard.svg';
+import amexLogo from '../assets/svg/cards/amex.svg';
+import discoverLogo from '../assets/svg/cards/discover.svg';
+import dinersLogo from '../assets/svg/cards/diners.svg';
+import jcbLogo from '../assets/svg/cards/jcb.svg';
+import unionpayLogo from '../assets/svg/cards/unionpay.svg';
+import mirLogo from '../assets/svg/cards/mir.svg';
+import maestroLogo from '../assets/svg/cards/maestro.svg';
 
 const CARD_PATTERNS = {
   visa: /^4[0-9]{0,}/,

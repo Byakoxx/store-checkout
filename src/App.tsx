@@ -1,4 +1,3 @@
-import { useDispatch } from "react-redux";
 import ResultPage from "./pages/ResultPage";
 import ProductPage from "./pages/ProductPage";
 import SummaryBackdrop from "./pages/SummaryBackdrop";
@@ -17,7 +16,6 @@ function App() {
     handleStartPayment,
     handleExpand,
     handleReveal,
-    handleCancelFlow,
     setFrontLayerState,
   } = useBackdropFlow();
 
@@ -54,7 +52,6 @@ function App() {
               <SummaryBackdrop
                 onConfirm={handleConfirm}
                 onClose={handleCloseSummary}
-                onCancel={handleCancelFlow}
                 frontLayerState={frontLayerState}
                 onExpand={handleExpand}
                 onReveal={handleReveal}
