@@ -5,7 +5,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { ArrowLeft, CreditCard, Truck } from "lucide-react";
 
 import { RootState } from "../app/store";
+import { PaymentFlowState } from "../App";
 import { Button } from "../components/ui/Button";
+import { detectCardType } from "../utils/cardUtils";
 import placeholder from "../assets/svg/product/placeholder.svg";
 import { setProcessing } from '../features/transaction/transactionSlice';
 
@@ -17,13 +19,14 @@ interface SummaryBackdropProps {
   onClose: () => void;
   frontLayerState: 'expanded' | 'revealed';
   onExpand: () => void;
+  formData: PaymentFlowState;
 }
 
-const SummaryBackdrop = ({ onConfirm, onClose, frontLayerState, onExpand }: SummaryBackdropProps) => {
+const SummaryBackdrop = ({ onConfirm, onClose, frontLayerState, onExpand, formData }: SummaryBackdropProps) => {
   const dispatch = useDispatch();
   const isProcessing = useSelector((state: RootState) => state.transaction.isProcessing);
-  const product = useSelector((state: RootState) => state.payment.form.product);
-  const form = useSelector((state: RootState) => state.payment.form);
+  const product = formData?.product;
+  const form = formData || {};
 
   const confirmBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -45,6 +48,8 @@ const SummaryBackdrop = ({ onConfirm, onClose, frontLayerState, onExpand }: Summ
 
   const basePrice = product?.price || 0;
   const total = basePrice + BASE_FEE + DELIVERY_FEE;
+
+  const cardType = detectCardType(form.cardNumber || "");
 
   const handleConfirmClick = () => {
     dispatch(setProcessing(true));
@@ -89,13 +94,19 @@ const SummaryBackdrop = ({ onConfirm, onClose, frontLayerState, onExpand }: Summ
           <div className="flex justify-between">
             <div className="flex items-center space-x-4 py-4 border-y">
               <div className="relative w-16 h-16 flex-shrink-0">
-                <img src={placeholder} alt={product.name} className="object-contain" />
+                <img
+                  src={product?.image || placeholder}
+                  alt={product?.name || 'Product'}
+                  className="object-contain"
+                  loading="lazy"
+                  onError={e => { e.currentTarget.src = placeholder; }}
+                />
               </div>
               <div className="flex-1">
-                <h3 className="font-medium">{product.name}</h3>
+                <h3 className="font-medium">{product?.name || 'Product'}</h3>
                 <p className="text-sm text-gray-500">Quantity: 1</p>
               </div>
-              <div className="font-semibold">${product.price.toFixed(2)}</div>
+              <div className="font-semibold">${product?.price.toFixed(2) || '0.00'}</div>
             </div>
           </div>
           <div className="flex flex-col space-y-2 my-2">
@@ -117,13 +128,13 @@ const SummaryBackdrop = ({ onConfirm, onClose, frontLayerState, onExpand }: Summ
             <span className="font-semibold text-sm">${total.toFixed(2)}</span>
           </div>
 
-          <div className="bg-gray-50 p-3 rounded-lg space-y-2">
+          <div className="bg-gray-50 p-3 mt-5 rounded-lg space-y-2">
             <div className="flex items-center">
               <CreditCard className="h-5 w-5 text-gray-500 mr-2" />
               <div>
                 <p className="text-sm font-medium">Payment method</p>
                 <p className="text-sm text-gray-500">
-                  {form.cardType === "visa" ? "Visa" : "Mastercard"} •••• {form.cardNumber.slice(-4)}
+                  {cardType ? cardType.charAt(0).toUpperCase() + cardType.slice(1) : "Card"} •••• {form.cardNumber.slice(-4)}
                 </p>
               </div>
             </div>

@@ -2,6 +2,7 @@ import { InputHTMLAttributes, useMemo, useState } from 'react';
 import { UseFormRegister, UseFormSetValue } from 'react-hook-form';
 
 import { PaymentFormData } from '../../../schemas/payment.schema';
+import placeholder from '../../../assets/svg/product/placeholder.svg';
 import { CARD_LOGOS, detectCardType } from '../../../utils/cardUtils';
 
 
@@ -66,10 +67,12 @@ const CardNumberField = ({
         />
         {cardType && (
           <img
-            src={CARD_LOGOS[cardType]}
+            src={CARD_LOGOS[cardType] || placeholder}
             alt={cardType}
             className="absolute right-3 top-1/2 -translate-y-1/2 h-7 w-10 opacity-0 animate-fade-in"
             style={{ animation: 'fade-in 0.3s forwards' }}
+            loading="lazy"
+            onError={e => { e.currentTarget.src = placeholder; }}
           />
         )}
       </div>

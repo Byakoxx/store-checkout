@@ -6,6 +6,7 @@ import { RootState } from "../app/store";
 import logo from "../assets/svg/logo.svg";
 import { Button } from "../components/ui/Button";
 import { reduceStock } from "../features/product/productSlice";
+import placeholder from '../assets/svg/product/placeholder.svg';
 import { clearPaymentForm } from '../features/payment/paymentSlice';
 import { setCurrentStep } from '../features/transaction/transactionSlice';
 
@@ -39,7 +40,7 @@ const ResultPage = ({ onContinue }: ResultPageProps) => {
         </div>
         <div className="text-center flex items-center text-gray-500 text-sm mt-16">
           <p>Powered by</p>
-          <img src={logo} alt="logo" className="w-10 h-10 -ml-1" />
+          <img src={logo} alt="logo" className="w-10 h-10 -ml-1" loading="lazy" onError={e => { e.currentTarget.src = placeholder; }} />
         </div>
       </div>
     )

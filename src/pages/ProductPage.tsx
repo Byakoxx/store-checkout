@@ -9,6 +9,7 @@ import { Button } from '../components/ui/Button';
 import { Card, CardContent } from '../components/ui/Card';
 import StockDisplay from '../components/ui/StockDisplay';
 import ProductSkeleton from '../components/ProductSkeleton';
+import placeholder from '../assets/svg/product/placeholder.svg';
 import { setProducts, setStatus } from '../features/product/productSlice';
 
 // Simulación de datos de API
@@ -59,9 +60,11 @@ export const ProductPage = ({ onStartPayment }: ProductPageProps) => {
             <div key={product.id} className="bg-card rounded-lg overflow-hidden max-w-sm mx-auto">
               <div className="aspect-square bg-secondary flex items-center justify-center">
                 <img
-                  src={product.image}
+                  src={product.image || placeholder}
                   alt={product.name}
                   className="object-cover w-full h-full"
+                  loading="lazy"
+                  onError={e => { e.currentTarget.src = placeholder; }}
                 />
               </div>
               <CardContent className="p-6">
