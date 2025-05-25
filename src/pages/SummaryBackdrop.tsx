@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../app/store";
 import { Button } from "../components/ui/Button";
-import { ArrowLeft, Check } from "lucide-react";
+import { ArrowLeft, Check, CreditCard, Truck } from "lucide-react";
 import placeholder from "../assets/svg/product/placeholder.svg";
 import { useState } from "react";
 
@@ -13,10 +13,9 @@ interface SummaryBackdropProps {
   onClose: () => void;
   frontLayerState: 'expanded' | 'revealed';
   onExpand: () => void;
-  onReveal: () => void;
 }
 
-const SummaryBackdrop = ({ onConfirm, onClose, frontLayerState, onExpand, onReveal }: SummaryBackdropProps) => {
+const SummaryBackdrop = ({ onConfirm, onClose, frontLayerState, onExpand }: SummaryBackdropProps) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const product = useSelector((state: RootState) => state.payment.form.product);
   const form = useSelector((state: RootState) => state.payment.form);
@@ -29,8 +28,8 @@ const SummaryBackdrop = ({ onConfirm, onClose, frontLayerState, onExpand, onReve
   const handleConfirmClick = () => {
     setIsProcessing(true);
     setTimeout(() => {
-      setIsProcessing(false);
       setTimeout(() => {
+        setIsProcessing(false);
         onConfirm();
       }, 1000);
     }, 2000);
@@ -41,7 +40,7 @@ const SummaryBackdrop = ({ onConfirm, onClose, frontLayerState, onExpand, onReve
       {/* Handle visual */}
       <div
         className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-4 cursor-pointer"
-        onClick={frontLayerState === 'expanded' ? onReveal : onExpand}
+        onClick={frontLayerState === 'expanded' ? onClose : onExpand}
         title={frontLayerState === 'expanded' ? 'Revelar productos' : 'Expandir resumen'}
       />
       {/* Botón atrás y título */}
@@ -71,27 +70,49 @@ const SummaryBackdrop = ({ onConfirm, onClose, frontLayerState, onExpand, onReve
           </div>
         </div>
         <div className="flex flex-col space-y-2 my-2">
-        <div className="flex justify-between">
-          <span className="text-sm text-gray-500">Base price:</span>
-          <span className="font-semibold text-sm">${basePrice.toFixed(2)}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-sm text-gray-500">Fixed fee:</span>
-          <span className="font-semibold text-sm">${BASE_FEE.toFixed(2)}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-sm text-gray-500">Delivery fee:</span>
-          <span className="font-semibold text-sm">${DELIVERY_FEE.toFixed(2)}</span>
-        </div>
+          <div className="flex justify-between">
+            <span className="text-sm text-gray-500">Base price:</span>
+            <span className="font-semibold text-sm">${basePrice.toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-sm text-gray-500">Fixed fee:</span>
+            <span className="font-semibold text-sm">${BASE_FEE.toFixed(2)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-sm text-gray-500">Delivery fee:</span>
+            <span className="font-semibold text-sm">${DELIVERY_FEE.toFixed(2)}</span>
+          </div>
         </div>
         <div className="flex justify-between font-bold border-t pt-2 mt-2">
           <span className="text-sm text-gray-500">Total:</span>
           <span className="font-semibold text-sm">${total.toFixed(2)}</span>
         </div>
+
+        <div className="bg-gray-50 p-3 rounded-lg space-y-2">
+          <div className="flex items-center">
+            <CreditCard className="h-5 w-5 text-gray-500 mr-2" />
+            <div>
+              <p className="text-sm font-medium">Método de pago</p>
+              <p className="text-sm text-gray-500">
+                {form.cardType === "visa" ? "Visa" : "Mastercard"} •••• {form.cardNumber.slice(-4)}
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-center">
+            <Truck className="h-5 w-5 text-gray-500 mr-2" />
+            <div>
+              <p className="text-sm font-medium">Dirección de envío</p>
+              <p className="text-sm text-gray-500">
+                {form.country}, {form.city}, {form.address}, {form.zipCode}
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
-        <Button className="w-full py-3 text-lg" onClick={handleConfirmClick} disabled={isProcessing}>
-          {isProcessing ? 'Processing payment...' : 'Confirm payment'}
-        </Button>
+      <Button className="w-full py-3 text-lg" onClick={handleConfirmClick} disabled={isProcessing}>
+        {isProcessing ? 'Processing payment...' : 'Confirm payment'}
+      </Button>
     </div>
   );
 };

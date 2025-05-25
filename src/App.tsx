@@ -24,7 +24,7 @@ function App() {
   });
 
   if (currentStep === 'result') {
-    return <ResultPage />;
+    return <ResultPage isProcessing={true} />;
   }
 
   return (
@@ -54,7 +54,6 @@ function App() {
                 onClose={handleCloseSummary}
                 frontLayerState={frontLayerState}
                 onExpand={handleExpand}
-                onReveal={handleReveal}
               />
             )}
           </div>

@@ -46,7 +46,6 @@ export const ProductPage = ({ onStartPayment }: ProductPageProps) => {
     return <ProductSkeleton />;
   }
 
-  // Al hacer click en pagar, llama a la prop onStartPayment con el producto
   const handlePaymentClick = (product: Product) => {
     onStartPayment(product);
   };
