@@ -8,8 +8,8 @@ const StockDisplay = ({ stock }: StockDisplayProps) => {
   return (
     <div className="text-primary text-sm font-medium mb-6">
       {isLowStock
-        ? `¡Corre, quedan ${stock} ${stock === 1 ? "producto" : "productos"}!`
-        : `${stock} unidades disponibles`}
+        ? `Hurry, only ${stock} ${stock === 1 ? "item" : "items"} left!`
+        : `${stock} items available`}
     </div>
   );
 };

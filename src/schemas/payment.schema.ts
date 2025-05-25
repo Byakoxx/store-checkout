@@ -6,28 +6,28 @@ export const paymentSchema = z.object({
     .string()
     .transform((val) => val.replace(/\s+/g, ''))
     .refine((val) => val.length === CARD_NUMBER_LENGTH, {
-      message: 'El número de tarjeta debe tener 16 dígitos',
+      message: 'Card number must be 16 digits',
     })
     .refine((val) => /^\d+$/.test(val), {
-      message: 'El número de tarjeta solo debe contener dígitos',
+      message: 'Card number must only contain digits',
     })
     .refine(
       (value) =>
         Object.values(CARD_PATTERNS).some(pattern => pattern.test(value)),
       {
-        message: 'Número de tarjeta inválido',
+        message: 'Invalid card number',
       }
     ),
   cardName: z
     .string()
-    .min(3, 'El nombre debe tener al menos 3 caracteres')
-    .max(50, 'El nombre debe tener menos de 50 caracteres')
+    .min(3, 'Name must be at least 3 characters')
+    .max(50, 'Name must be less than 50 characters')
     .refine((val) => /^[a-zA-ZáéíóúñÁÉÍÓÚÑ\s]*$/.test(val), {
-      message: 'El nombre solo debe contener letras y espacios',
+      message: 'Name must only contain letters and spaces',
     }),
   expiryDate: z
     .string()
-    .regex(/^(0[1-9]|1[0-2])\/([0-9]{2})$/, 'Formato de fecha inválido (MM/AA)')
+    .regex(/^(0[1-9]|1[0-2])\/([0-9]{2})$/, 'Invalid date format (MM/AA)')
     .refine(
       (value) => {
         const [month, year] = value.split('/');
@@ -43,34 +43,34 @@ export const paymentSchema = z.object({
           (expYear === currentYear && expMonth >= currentMonth)
         );
       },
-      'La tarjeta ha expirado'
+      'Card has expired'
     ),
   cvv: z
     .string()
-    .min(CVV_LENGTH, `El CVV debe tener ${CVV_LENGTH} dígitos`)
-    .max(CVV_LENGTH, `El CVV debe tener ${CVV_LENGTH} dígitos`)
-    .regex(/^\d+$/, 'El CVV solo debe contener dígitos'),
+    .min(CVV_LENGTH, `CVV must be ${CVV_LENGTH} digits`)
+    .max(CVV_LENGTH, `CVV must be ${CVV_LENGTH} digits`)
+    .regex(/^\d+$/, 'CVV must only contain digits'),
   fullName: z
     .string()
-    .min(3, 'El nombre debe tener al menos 3 caracteres')
-    .max(50, 'El nombre debe tener menos de 50 caracteres')
+    .min(3, 'Name must be at least 3 characters')
+    .max(50, 'Name must be less than 50 characters')
     .refine((val) => /^[a-zA-ZáéíóúñÁÉÍÓÚÑ\s]*$/.test(val), {
-      message: 'El nombre solo debe contener letras y espacios',
+      message: 'Name must only contain letters and spaces',
     }),
   address: z
     .string()
-    .min(3, 'La dirección debe tener al menos 3 caracteres')
-    .max(100, 'La dirección debe tener menos de 100 caracteres'),
+    .min(3, 'Address must be at least 3 characters')
+    .max(100, 'Address must be less than 100 characters'),
   city: z
     .string()
-    .min(3, 'La ciudad debe tener al menos 3 caracteres'),
+    .min(3, 'City must be at least 3 characters'),
   zipCode: z
     .string()
-    .min(5, 'El código postal debe tener al menos 5 caracteres')
-    .max(5, 'El código postal debe tener 5 caracteres'),
+    .min(5, 'Zip code must be at least 5 characters')
+    .max(5, 'Zip code must be 5 characters'),
   country: z
     .string()
-    .min(3, 'El país debe tener al menos 3 caracteres'),
+    .min(3, 'Country must be at least 3 characters'),
 });
 
 export type PaymentFormData = z.infer<typeof paymentSchema>

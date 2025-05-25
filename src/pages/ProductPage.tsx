@@ -16,11 +16,11 @@ import { setProducts, setStatus } from '../features/product/productSlice';
 const mockProducts: Product[] = [
   {
     id: '1',
-    name: 'Auriculares Inalámbricos Premium',
+    name: 'Premium Wireless Headphones',
     price: 129.99,
     stock: 10,
     image: 'https://via.placeholder.com/400',
-    description: 'Auriculares inalámbricos con cancelación de ruido, batería de larga duración y sonido de alta fidelidad. Perfectos para trabajo y ocio.'
+    description: 'Wireless headphones with noise cancellation, long battery life and high fidelity sound. Perfect for work and leisure.'
   }
 ];
 
@@ -95,14 +95,14 @@ export const ProductPage: React.FC = () => {
                   onClick={() => handlePaymentClick(product.id as unknown as Product)}
                 >
                   <ShoppingCart className="mr-2 h-5 w-5" />
-                  Pagar con tarjeta de crédito
+                  Pay with credit card
                 </Button>
               </CardContent>
             </div>
           ))}
         </Card>
         <div className="text-center text-muted-foreground text-sm mt-16">
-          © {new Date().getFullYear()} PayFlow Store. Todos los derechos reservados.
+          © {new Date().getFullYear()} PayFlow Store. All rights reserved.
         </div>
       </div>
 

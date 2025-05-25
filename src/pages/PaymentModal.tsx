@@ -32,6 +32,8 @@ const PaymentModal = ({ isOpen, onClose, onExited, product }: PaymentModalProps)
     errors,
     formatCardNumber,
     formatExpiryDate,
+    watch,
+    setValue,
   } = usePaymentForm();
 
   const onSubmit = async (data: PaymentFormData) => {
@@ -81,7 +83,7 @@ const PaymentModal = ({ isOpen, onClose, onExited, product }: PaymentModalProps)
       <div className="bg-white rounded-xl shadow-xl w-full max-w-md max-h-[90vh] overflow-auto">
         {/* HEADER */}
         <div className="flex items-center justify-between p-4 border-b">
-          <h2 className="text-xl font-semibold">Información de pago</h2>
+          <h2 className="text-xl font-semibold">Payment information</h2>
           <Button variant="ghost" size="icon" onClick={onClose}>
             <X className="h-5 w-5" />
           </Button>
@@ -91,8 +93,10 @@ const PaymentModal = ({ isOpen, onClose, onExited, product }: PaymentModalProps)
         <form onSubmit={handleSubmit(onSubmit)} className="p-4 space-y-4">
           <CardNumberField
             register={register}
+            setValue={setValue}
             error={errors.cardNumber?.message}
             formatCardNumber={formatCardNumber}
+            value={watch('cardNumber')}
           />
 
           <div className="grid grid-cols-2 gap-4">
@@ -114,29 +118,33 @@ const PaymentModal = ({ isOpen, onClose, onExited, product }: PaymentModalProps)
           />
 
           <div className="space-y-4 pt-4 border-t">
-            <h3 className="font-medium text-lg">Información de envío</h3>
+            <h3 className="font-medium text-lg">Shipping information</h3>
 
             <Input
+              label="Full name"
               {...register('fullName')}
               error={errors.fullName?.message}
-              placeholder="Nombre completo"
+              placeholder="Full name"
             />
 
             <Input
+              label="Address"
               {...register('address')}
               error={errors.address?.message}
-              placeholder="Dirección"
+              placeholder="Address"
             />
             <div className="grid grid-cols-2 gap-4">
               <Input
+                label="City"
                 {...register('city')}
                 error={errors.city?.message}
-                placeholder="Ciudad"
+                placeholder="City"
               />
               <Input
+                label="Zip code"
                 {...register('zipCode')}
                 error={errors.zipCode?.message}
-                placeholder="Código postal"
+                placeholder="Zip code"
               />
             </div>
           </div>
@@ -149,7 +157,7 @@ const PaymentModal = ({ isOpen, onClose, onExited, product }: PaymentModalProps)
               className="w-full py-6 text-lg rounded-lg"
               disabled={isProcessing}
             >
-              {isProcessing ? 'Procesando pago...' : 'Pagar ahora'}
+              {isProcessing ? 'Processing payment...' : 'Continue'}
             </Button>
           </div>
         </form>

@@ -1,6 +1,5 @@
 import { InputHTMLAttributes, useMemo } from 'react';
-
-import { UseFormRegister } from 'react-hook-form';
+import { UseFormRegister, UseFormSetValue } from 'react-hook-form';
 
 import { PaymentFormData } from '../../../schemas/payment.schema';
 import visaLogo from '../../../assets/visa.svg';
@@ -10,8 +9,10 @@ import amexLogo from '../../../assets/amex.svg';
 
 interface CardNumberFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   register: UseFormRegister<PaymentFormData>;
+  setValue: UseFormSetValue<PaymentFormData>;
   error?: string;
   formatCardNumber: (value: string) => string;
+  value: string;
 }
 
 const CARD_PATTERNS = {
@@ -28,6 +29,7 @@ const CARD_LOGOS: Record<string, string> = {
 
 const CardNumberField = ({
   register,
+  setValue,
   error,
   formatCardNumber,
   value,
@@ -43,7 +45,12 @@ const CardNumberField = ({
     return null;
   }, [value]);
 
-  console.log(cardType);
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let raw = e.target.value.replace(/\D/g, '');
+    if (raw.length > 16) raw = raw.slice(0, 16);
+    const formatted = formatCardNumber(raw);
+    setValue('cardNumber', formatted, { shouldValidate: true });
+  };
 
   return (
     <div className="flex flex-col gap-1">
@@ -59,15 +66,10 @@ const CardNumberField = ({
           className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 pr-14 ${
             error
               ? 'border-red-500 focus:ring-red-200'
-              : 'border-gray-300 focus:ring-blue-200'
+              : 'border-gray-300 focus:ring-black/30'
           }`}
-          {...register('cardNumber', {
-            onChange: (e) => {
-              const formatted = formatCardNumber(e.target.value);
-              e.target.value = formatted;
-            },
-          })}
           value={value}
+          onChange={handleChange}
           {...props}
         />
         {cardType && (
