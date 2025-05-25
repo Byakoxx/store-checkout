@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import { ShoppingCart } from "lucide-react";
 import { useDispatch, useSelector } from 'react-redux';
 
 import { RootState } from '../app/store';
-import PaymentModal from './PaymentModal';
 import { Product } from '../types/product';
 import { Button } from '../components/ui/Button';
 import { Card, CardContent } from '../components/ui/Card';
@@ -24,41 +23,19 @@ const mockProducts: Product[] = [
   }
 ];
 
-export const ProductPage: React.FC = () => {
+interface ProductPageProps {
+  onStartPayment: (product: Product) => void;
+}
 
-  // State
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [modalShouldRender, setModalShouldRender] = useState(false);
-
-
+export const ProductPage = ({ onStartPayment }: ProductPageProps) => {
   // Selectors
   const products = useSelector((state: RootState) => state.product.products);
   const status = useSelector((state: RootState) => state.product.status);
-
-  // Dispatch
   const dispatch = useDispatch();
-
-  // Handlers
-  const handlePaymentClick = (product: Product) => {
-    setSelectedProduct(product);
-    setIsPaymentModalOpen(true);
-    setModalShouldRender(true);
-  };
-
-  const handleModalClose = () => {
-    setIsPaymentModalOpen(false);
-  };
-
-  const handleModalExited = () => {
-    setModalShouldRender(false);
-    setSelectedProduct(null);
-  };
 
   useEffect(() => {
     // Simular carga de API
     dispatch(setStatus('loading'));
-    // Simular delay de red
     setTimeout(() => {
       dispatch(setProducts(mockProducts));
       dispatch(setStatus('idle'));
@@ -67,10 +44,15 @@ export const ProductPage: React.FC = () => {
 
   if (status === 'loading') {
     return <ProductSkeleton />;
+  }
+
+  // Al hacer click en pagar, llama a la prop onStartPayment con el producto
+  const handlePaymentClick = (product: Product) => {
+    onStartPayment(product);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 relative">
       <div className="max-w-md mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold text-foreground mb-8 text-center">PayFlow Store</h1>
         <Card className="grid gap-8 bg-white p-5 shadow-2xl">
@@ -92,7 +74,7 @@ export const ProductPage: React.FC = () => {
                 <StockDisplay stock={product.stock} />
                 <Button
                   className="w-full bg-foreground text-background py-4 px-6 rounded-2xl font-medium hover:bg-muted transition-colors"
-                  onClick={() => handlePaymentClick(product.id as unknown as Product)}
+                  onClick={() => handlePaymentClick(product)}
                 >
                   <ShoppingCart className="mr-2 h-5 w-5" />
                   Pay with credit card
@@ -105,15 +87,6 @@ export const ProductPage: React.FC = () => {
           © {new Date().getFullYear()} PayFlow Store. All rights reserved.
         </div>
       </div>
-
-      {modalShouldRender && selectedProduct && (
-        <PaymentModal
-          isOpen={isPaymentModalOpen}
-          onClose={handleModalClose}
-          onExited={handleModalExited}
-          product={selectedProduct}
-        />
-      )}
     </div>
   );
 };
