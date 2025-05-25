@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1748211038641" clover="3.2.0">
+  <project timestamp="1748211038641" name="All files">
+    <metrics statements="238" coveredstatements="238" conditionals="67" coveredconditionals="62" methods="80" coveredmethods="76" elements="385" coveredelements="376" complexity="0" loc="238" ncloc="238" packages="8" files="15" classes="15"/>
+    <package name="components.forms.payment">
+      <metrics statements="48" coveredstatements="48" conditionals="36" coveredconditionals="33" methods="17" coveredmethods="17"/>
+      <file name="CVVField.tsx" path="/Volumes/Disco Externo/NoSync/technical-tests/store-checkout/src/components/forms/payment/CVVField.tsx">
+        <metrics statements="9" coveredstatements="9" conditionals="8" coveredconditionals="8" methods="4" coveredmethods="4"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="12" count="4" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="21" count="5" type="stmt"/>
+        <line num="22" count="5" type="cond" truecount="4" falsecount="0"/>
+        <line num="24" count="5" type="stmt"/>
+        <line num="41" count="1" type="stmt"/>
+        <line num="42" count="1" type="stmt"/>
+        <line num="52" count="1" type="stmt"/>
+      </file>
+      <file name="CardNameField.tsx" path="/Volumes/Disco Externo/NoSync/technical-tests/store-checkout/src/components/forms/payment/CardNameField.tsx">
+        <metrics statements="3" coveredstatements="3" conditionals="4" coveredconditionals="4" methods="1" coveredmethods="1"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="17" count="3" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
+      </file>
+      <file name="CardNumberField.tsx" path="/Volumes/Disco Externo/NoSync/technical-tests/store-checkout/src/components/forms/payment/CardNumberField.tsx">
+        <metrics statements="21" coveredstatements="21" conditionals="15" coveredconditionals="13" methods="7" coveredmethods="7"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="8" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="30" count="9" type="stmt"/>
+        <line num="32" count="9" type="stmt"/>
+        <line num="34" count="9" type="stmt"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="36" count="1" type="cond" truecount="1" falsecount="1"/>
+        <line num="37" count="1" type="cond" truecount="0" falsecount="1"/>
+        <line num="38" count="1" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
+        <line num="42" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="43" count="9" type="cond" truecount="2" falsecount="0"/>
+        <line num="45" count="9" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="64" count="1" type="stmt"/>
+        <line num="75" count="1" type="stmt"/>
+        <line num="84" count="1" type="stmt"/>
+      </file>
+      <file name="ExpiryDateField.tsx" path="/Volumes/Disco Externo/NoSync/technical-tests/store-checkout/src/components/forms/payment/ExpiryDateField.tsx">
+        <metrics statements="15" coveredstatements="15" conditionals="9" coveredconditionals="8" methods="5" coveredmethods="5"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="15" count="5" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="25" count="7" type="stmt"/>
+        <line num="27" count="7" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="29" count="1" type="cond" truecount="0" falsecount="1"/>
+        <line num="30" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="34" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="35" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="37" count="7" type="stmt"/>
+        <line num="53" count="2" type="stmt"/>
+        <line num="54" count="1" type="stmt"/>
+        <line num="64" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="constants">
+      <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+      <file name="payment.constants.ts" path="/Volumes/Disco Externo/NoSync/technical-tests/store-checkout/src/constants/payment.constants.ts">
+        <metrics statements="6" coveredstatements="6" conditionals="0" coveredconditionals="0" methods="0" coveredmethods="0"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="features.payment">
+      <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+      <file name="paymentSlice.ts" path="/Volumes/Disco Externo/NoSync/technical-tests/store-checkout/src/features/payment/paymentSlice.ts">
+        <metrics statements="7" coveredstatements="7" conditionals="0" coveredconditionals="0" methods="2" coveredmethods="2"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="16" count="2" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="features.product">
+      <metrics statements="17" coveredstatements="17" conditionals="2" coveredconditionals="2" methods="10" coveredmethods="10"/>
+      <file name="productSlice.ts" path="/Volumes/Disco Externo/NoSync/technical-tests/store-checkout/src/features/product/productSlice.ts">
+        <metrics statements="17" coveredstatements="17" conditionals="2" coveredconditionals="2" methods="10" coveredmethods="10"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="25" count="2" type="stmt"/>
+        <line num="26" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="37" count="1" type="stmt"/>
+        <line num="40" count="1" type="stmt"/>
+        <line num="43" count="2" type="stmt"/>
+        <line num="44" count="2" type="stmt"/>
+        <line num="45" count="2" type="cond" truecount="1" falsecount="0"/>
+        <line num="46" count="2" type="stmt"/>
+        <line num="52" count="1" type="stmt"/>
+        <line num="54" count="1" type="stmt"/>
+      </file>
+    </package>
+    <package name="features.transaction">
+      <metrics statements="19" coveredstatements="19" conditionals="3" coveredconditionals="3" methods="11" coveredmethods="11"/>
+      <file name="transactionSlice.ts" path="/Volumes/Disco Externo/NoSync/technical-tests/store-checkout/src/features/transaction/transactionSlice.ts">
+        <metrics statements="19" coveredstatements="19" conditionals="3" coveredconditionals="3" methods="11" coveredmethods="11"/>
+        <line num="1" count="3" type="stmt"/>
+        <line num="22" count="3" type="stmt"/>
+        <line num="31" count="3" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="42" count="1" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="46" count="1" type="stmt"/>
+        <line num="47" count="1" type="cond" truecount="1" falsecount="0"/>
+        <line num="48" count="1" type="stmt"/>
+        <line num="49" count="1" type="stmt"/>
+        <line num="53" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="56" count="1" type="stmt"/>
+        <line num="59" count="1" type="stmt"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="65" count="1" type="stmt"/>
+        <line num="68" count="1" type="stmt"/>
+        <line num="71" count="1" type="stmt"/>
+        <line num="76" count="3" type="stmt"/>
+        <line num="88" count="3" type="stmt"/>
+      </file>
+    </package>
+    <package name="hooks">
+      <metrics statements="105" coveredstatements="105" conditionals="18" coveredconditionals="16" methods="30" coveredmethods="26"/>
+      <file name="useBackdropFlow.ts" path="/Volumes/Disco Externo/NoSync/technical-tests/store-checkout/src/hooks/useBackdropFlow.ts">
+        <metrics statements="47" coveredstatements="47" conditionals="7" coveredconditionals="7" methods="16" coveredmethods="13"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="7" count="1" type="stmt"/>
+        <line num="9" count="1" type="stmt"/>
+        <line num="10" count="25" type="stmt"/>
+        <line num="11" count="25" type="stmt"/>
+        <line num="12" count="25" type="stmt"/>
+        <line num="13" count="25" type="stmt"/>
+        <line num="14" count="25" type="stmt"/>
+        <line num="15" count="25" type="stmt"/>
+        <line num="16" count="25" type="stmt"/>
+        <line num="17" count="25" type="stmt"/>
+        <line num="19" count="25" type="stmt"/>
+        <line num="20" count="10" type="cond" truecount="5" falsecount="0"/>
+        <line num="21" count="2" type="stmt"/>
+        <line num="22" count="2" type="stmt"/>
+        <line num="23" count="2" type="stmt"/>
+        <line num="24" count="8" type="cond" truecount="2" falsecount="0"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="29" count="7" type="stmt"/>
+        <line num="30" count="7" type="stmt"/>
+        <line num="34" count="25" type="stmt"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="37" count="1" type="stmt"/>
+        <line num="38" count="1" type="stmt"/>
+        <line num="39" count="1" type="stmt"/>
+        <line num="40" count="1" type="stmt"/>
+        <line num="41" count="1" type="stmt"/>
+        <line num="42" count="1" type="stmt"/>
+        <line num="43" count="1" type="stmt"/>
+        <line num="47" count="25" type="stmt"/>
+        <line num="48" count="1" type="stmt"/>
+        <line num="49" count="1" type="stmt"/>
+        <line num="51" count="25" type="stmt"/>
+        <line num="52" count="1" type="stmt"/>
+        <line num="54" count="25" type="stmt"/>
+        <line num="55" count="25" type="stmt"/>
+        <line num="57" count="25" type="stmt"/>
+        <line num="58" count="1" type="stmt"/>
+        <line num="59" count="1" type="stmt"/>
+        <line num="60" count="1" type="stmt"/>
+        <line num="61" count="1" type="stmt"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="65" count="25" type="stmt"/>
+      </file>
+      <file name="useBackdropTransition.ts" path="/Volumes/Disco Externo/NoSync/technical-tests/store-checkout/src/hooks/useBackdropTransition.ts">
+        <metrics statements="22" coveredstatements="22" conditionals="1" coveredconditionals="1" methods="7" coveredmethods="7"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="9" type="stmt"/>
+        <line num="13" count="9" type="stmt"/>
+        <line num="15" count="9" type="stmt"/>
+        <line num="16" count="9" type="cond" truecount="1" falsecount="0"/>
+        <line num="17" count="3" type="stmt"/>
+        <line num="18" count="3" type="stmt"/>
+        <line num="19" count="3" type="stmt"/>
+        <line num="21" count="3" type="stmt"/>
+        <line num="25" count="9" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="30" count="9" type="stmt"/>
+        <line num="31" count="1" type="stmt"/>
+        <line num="32" count="1" type="stmt"/>
+        <line num="35" count="9" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="37" count="1" type="stmt"/>
+        <line num="40" count="9" type="stmt"/>
+      </file>
+      <file name="usePaymentForm.ts" path="/Volumes/Disco Externo/NoSync/technical-tests/store-checkout/src/hooks/usePaymentForm.ts">
+        <metrics statements="22" coveredstatements="22" conditionals="6" coveredconditionals="6" methods="3" coveredmethods="3"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="5" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="25" count="38" type="stmt"/>
+        <line num="31" count="38" type="stmt"/>
+        <line num="32" count="7" type="stmt"/>
+        <line num="33" count="7" type="stmt"/>
+        <line num="34" count="7" type="cond" truecount="3" falsecount="0"/>
+        <line num="35" count="7" type="stmt"/>
+        <line num="37" count="7" type="stmt"/>
+        <line num="38" count="12" type="stmt"/>
+        <line num="41" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="42" count="4" type="stmt"/>
+        <line num="44" count="3" type="stmt"/>
+        <line num="48" count="38" type="stmt"/>
+        <line num="49" count="7" type="stmt"/>
+        <line num="50" count="7" type="cond" truecount="1" falsecount="0"/>
+        <line num="51" count="4" type="stmt"/>
+        <line num="53" count="3" type="stmt"/>
+        <line num="56" count="38" type="stmt"/>
+      </file>
+      <file name="usePersistedState.ts" path="/Volumes/Disco Externo/NoSync/technical-tests/store-checkout/src/hooks/usePersistedState.ts">
+        <metrics statements="14" coveredstatements="14" conditionals="4" coveredconditionals="2" methods="4" coveredmethods="3"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="4" count="11" type="stmt"/>
+        <line num="5" count="7" type="stmt"/>
+        <line num="6" count="7" type="stmt"/>
+        <line num="7" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="10" count="2" type="stmt"/>
+        <line num="14" count="11" type="stmt"/>
+        <line num="15" count="11" type="stmt"/>
+        <line num="16" count="11" type="stmt"/>
+        <line num="18" count="4" type="stmt"/>
+        <line num="22" count="11" type="stmt"/>
+        <line num="30" count="1" type="cond" truecount="0" falsecount="2"/>
+      </file>
+    </package>
+    <package name="schemas">
+      <metrics statements="16" coveredstatements="16" conditionals="5" coveredconditionals="5" methods="8" coveredmethods="8"/>
+      <file name="payment.schema.ts" path="/Volumes/Disco Externo/NoSync/technical-tests/store-checkout/src/schemas/payment.schema.ts">
+        <metrics statements="16" coveredstatements="16" conditionals="5" coveredconditionals="5" methods="8" coveredmethods="8"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="8" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="16" count="10" type="stmt"/>
+        <line num="25" count="2" type="stmt"/>
+        <line num="33" count="2" type="stmt"/>
+        <line num="34" count="2" type="stmt"/>
+        <line num="35" count="2" type="stmt"/>
+        <line num="36" count="2" type="stmt"/>
+        <line num="38" count="2" type="stmt"/>
+        <line num="39" count="2" type="stmt"/>
+        <line num="41" count="2" type="stmt"/>
+        <line num="57" count="2" type="stmt"/>
+      </file>
+    </package>
+    <package name="utils">
+      <metrics statements="20" coveredstatements="20" conditionals="3" coveredconditionals="3" methods="2" coveredmethods="2"/>
+      <file name="cardUtils.ts" path="/Volumes/Disco Externo/NoSync/technical-tests/store-checkout/src/utils/cardUtils.ts">
+        <metrics statements="16" coveredstatements="16" conditionals="3" coveredconditionals="3" methods="1" coveredmethods="1"/>
+        <line num="1" count="2" type="stmt"/>
+        <line num="2" count="2" type="stmt"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="4" count="2" type="stmt"/>
+        <line num="5" count="2" type="stmt"/>
+        <line num="6" count="2" type="stmt"/>
+        <line num="7" count="2" type="stmt"/>
+        <line num="8" count="2" type="stmt"/>
+        <line num="9" count="2" type="stmt"/>
+        <line num="11" count="2" type="stmt"/>
+        <line num="23" count="2" type="stmt"/>
+        <line num="35" count="2" type="stmt"/>
+        <line num="36" count="35" type="cond" truecount="2" falsecount="0"/>
+        <line num="37" count="35" type="stmt"/>
+        <line num="38" count="216" type="cond" truecount="1" falsecount="0"/>
+        <line num="40" count="8" type="stmt"/>
+      </file>
+      <file name="utils.ts" path="/Volumes/Disco Externo/NoSync/technical-tests/store-checkout/src/utils/utils.ts">
+        <metrics statements="4" coveredstatements="4" conditionals="0" coveredconditionals="0" methods="1" coveredmethods="1"/>
+        <line num="1" count="1" type="stmt"/>
+        <line num="2" count="1" type="stmt"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="5" count="8" type="stmt"/>
+      </file>
+    </package>
+  </project>
+</coverage>
