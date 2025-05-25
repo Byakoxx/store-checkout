@@ -128,7 +128,7 @@ const SummaryBackdrop = ({ onConfirm, onClose, frontLayerState, onExpand, formDa
             <span className="font-semibold text-sm">${total.toFixed(2)}</span>
           </div>
 
-          <div className="bg-gray-50 p-3 rounded-lg space-y-2">
+          <div className="bg-gray-50 p-3 mt-5 rounded-lg space-y-2">
             <div className="flex items-center">
               <CreditCard className="h-5 w-5 text-gray-500 mr-2" />
               <div>
