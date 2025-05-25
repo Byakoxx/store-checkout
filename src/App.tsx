@@ -1,9 +1,28 @@
+import { useState } from "react";
+
 import ResultPage from "./pages/ResultPage";
 import ProductPage from "./pages/ProductPage";
 import SummaryBackdrop from "./pages/SummaryBackdrop";
 import PaymentBackdrop from "./pages/PaymentBackdrop";
 import { useBackdropFlow } from "./hooks/useBackdropFlow";
+import { PaymentFormData } from "./schemas/payment.schema";
 import { useBackdropTransition } from "./hooks/useBackdropTransition";
+import { Product } from "./types/product";
+
+export type PaymentFlowState = PaymentFormData & { product: Product | null };
+
+const EMPTY_FORM: PaymentFlowState = {
+  cardNumber: "",
+  cardName: "",
+  expiryDate: "",
+  cvv: "",
+  fullName: "",
+  address: "",
+  city: "",
+  zipCode: "",
+  country: "",
+  product: null,
+};
 
 function App() {
   const {
@@ -13,7 +32,7 @@ function App() {
     frontLayerType,
     selectedProduct,
     remountKey,
-    handleStartPayment,
+    handleStartPayment: _handleStartPayment,
     handleExpand,
     handleReveal,
     setFrontLayerState,
@@ -23,6 +42,17 @@ function App() {
   const { handlePaymentConfirm, handleCloseSummary, handleSummaryConfirm } = useBackdropTransition({
     setFrontLayerState,
   });
+
+  const [paymentForm, setPaymentForm] = useState<PaymentFlowState>(EMPTY_FORM);
+
+  const handleStartPayment = (product: Product) => {
+    setPaymentForm({ ...EMPTY_FORM, product });
+    _handleStartPayment(product);
+  };
+
+  const handlePaymentFormChange = (formData: PaymentFlowState) => {
+    setPaymentForm(formData);
+  };
 
   const handleResultContinue = () => {
     resetFlow();
@@ -51,6 +81,8 @@ function App() {
                 onExpand={handleExpand}
                 onReveal={handleReveal}
                 onContinue={handlePaymentConfirm}
+                formData={paymentForm}
+                onFormChange={handlePaymentFormChange}
               />
             )}
             {frontLayerType === 'summary' && (
@@ -59,6 +91,7 @@ function App() {
                 onClose={handleCloseSummary}
                 frontLayerState={frontLayerState}
                 onExpand={handleExpand}
+                formData={paymentForm}
               />
             )}
           </div>

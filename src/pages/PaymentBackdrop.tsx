@@ -10,8 +10,8 @@ import { Product } from "../types/product";
 import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/Button";
 import { usePaymentForm } from "../hooks/usePaymentForm";
-import { PaymentFormData } from "../types/payment.types";
 import CVVField from "../components/forms/payment/CVVField";
+import { PaymentFormData } from "../schemas/payment.schema";
 import { setPaymentForm } from "../features/payment/paymentSlice";
 import CardNameField from "../components/forms/payment/CardNameField";
 import CardNumberField from "../components/forms/payment/CardNumberField";
@@ -26,9 +26,11 @@ interface PaymentBackdropProps {
   onExpand: () => void;
   onReveal: () => void;
   onContinue: () => void;
+  formData: PaymentFormData;
+  onFormChange: (formData: any) => void;
 }
 
-const PaymentBackdrop = ({ isOpen, onClose, onExited, product, frontLayerState, onExpand, onReveal, onContinue }: PaymentBackdropProps) => {
+const PaymentBackdrop = ({ isOpen, onClose, onExited, product, frontLayerState, onExpand, onReveal, onContinue, formData, onFormChange }: PaymentBackdropProps) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [show, setShow] = useState(isOpen);
 
@@ -44,13 +46,22 @@ const PaymentBackdrop = ({ isOpen, onClose, onExited, product, frontLayerState, 
     watch,
     setValue,
     reset,
-  } = usePaymentForm(paymentForm);
+  } = usePaymentForm(formData);
 
   const firstInputRef = useRef<HTMLInputElement>(null);
 
   const onSubmit = async (data: PaymentFormData) => {
     setIsProcessing(true);
-    dispatch(setPaymentForm({ ...data, product }));
+
+    const { fullName, country, address, city, zipCode } = data;
+    dispatch(setPaymentForm({
+      product,
+      fullName,
+      country,
+      address,
+      city,
+      zipCode,
+    }));
     onContinue();
     setIsProcessing(false);
   };
@@ -70,7 +81,6 @@ const PaymentBackdrop = ({ isOpen, onClose, onExited, product, frontLayerState, 
 
   useEffect(() => {
     if (isOpen) {
-      // Busca el primer input visible dentro del modal y haz focus
       setTimeout(() => {
         const modal = document.querySelector('[aria-label="Payment form"]');
         if (modal) {
@@ -92,6 +102,10 @@ const PaymentBackdrop = ({ isOpen, onClose, onExited, product, frontLayerState, 
       return () => window.removeEventListener("keydown", handleKeyDown);
     }
   }, [isOpen, onClose]);
+
+  useEffect(() => {
+    onFormChange(watch());
+  }, [watch, onFormChange]);
 
   if (!show) return null;
 
