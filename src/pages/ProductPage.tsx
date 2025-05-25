@@ -1,52 +1,73 @@
-import React, { useEffect } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { ShoppingCart } from "lucide-react"
-import { Button } from '../components/ui/Button'
-import { Card, CardContent } from '../components/ui/Card'
-import { RootState } from '../app/store'
-import { setProducts, setStatus } from '../features/product/productSlice'
-import { ProductSkeleton } from '../components/ProductSkeleton'
-import { StockDisplay } from '../components/ui/StockDisplay'
+import React, { useEffect, useState } from 'react';
 
-interface Product {
-  id: string
-  name: string
-  price: number
-  stock: number
-  image: string
-  description?: string
-}
+import { ShoppingCart } from "lucide-react";
+import { useDispatch, useSelector } from 'react-redux';
+
+import { RootState } from '../app/store';
+import PaymentModal from './PaymentModal';
+import { Product } from '../types/product';
+import { Button } from '../components/ui/Button';
+import { Card, CardContent } from '../components/ui/Card';
+import StockDisplay from '../components/ui/StockDisplay';
+import ProductSkeleton from '../components/ProductSkeleton';
+import { setProducts, setStatus } from '../features/product/productSlice';
 
 // Simulación de datos de API
 const mockProducts: Product[] = [
   {
     id: '1',
-    name: 'Auriculares Inalámbricos Premium',
+    name: 'Premium Wireless Headphones',
     price: 129.99,
     stock: 10,
     image: 'https://via.placeholder.com/400',
-    description: 'Auriculares inalámbricos con cancelación de ruido, batería de larga duración y sonido de alta fidelidad. Perfectos para trabajo y ocio.'
+    description: 'Wireless headphones with noise cancellation, long battery life and high fidelity sound. Perfect for work and leisure.'
   }
-]
+];
 
 export const ProductPage: React.FC = () => {
-  const dispatch = useDispatch()
-  const products = useSelector((state: RootState) => state.product.products)
-  const status = useSelector((state: RootState) => state.product.status)
+
+  // State
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [modalShouldRender, setModalShouldRender] = useState(false);
+
+
+  // Selectors
+  const products = useSelector((state: RootState) => state.product.products);
+  const status = useSelector((state: RootState) => state.product.status);
+
+  // Dispatch
+  const dispatch = useDispatch();
+
+  // Handlers
+  const handlePaymentClick = (product: Product) => {
+    setSelectedProduct(product);
+    setIsPaymentModalOpen(true);
+    setModalShouldRender(true);
+  };
+
+  const handleModalClose = () => {
+    setIsPaymentModalOpen(false);
+  };
+
+  const handleModalExited = () => {
+    setModalShouldRender(false);
+    setSelectedProduct(null);
+  };
 
   useEffect(() => {
     // Simular carga de API
-    dispatch(setStatus('loading'))
+    dispatch(setStatus('loading'));
     // Simular delay de red
     setTimeout(() => {
-      dispatch(setProducts(mockProducts))
-      dispatch(setStatus('idle'))
-    }, 1000)
-  }, [dispatch])
+      dispatch(setProducts(mockProducts));
+      dispatch(setStatus('idle'));
+    }, 1000);
+  }, [dispatch]);
 
   if (status === 'loading') {
-    return <ProductSkeleton />
-  }
+    return <ProductSkeleton />;
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -71,21 +92,30 @@ export const ProductPage: React.FC = () => {
                 <StockDisplay stock={product.stock} />
                 <Button
                   className="w-full bg-foreground text-background py-4 px-6 rounded-2xl font-medium hover:bg-muted transition-colors"
-                  onClick={() => console.log('Pagar con tarjeta de crédito:', product.id)}
+                  onClick={() => handlePaymentClick(product.id as unknown as Product)}
                 >
                   <ShoppingCart className="mr-2 h-5 w-5" />
-                  Pagar con tarjeta de crédito
+                  Pay with credit card
                 </Button>
               </CardContent>
             </div>
           ))}
         </Card>
         <div className="text-center text-muted-foreground text-sm mt-16">
-          © {new Date().getFullYear()} PayFlow Store. Todos los derechos reservados.
+          © {new Date().getFullYear()} PayFlow Store. All rights reserved.
         </div>
       </div>
-    </div>
-  )
-}
 
-export default ProductPage
+      {modalShouldRender && selectedProduct && (
+        <PaymentModal
+          isOpen={isPaymentModalOpen}
+          onClose={handleModalClose}
+          onExited={handleModalExited}
+          product={selectedProduct}
+        />
+      )}
+    </div>
+  );
+};
+
+export default ProductPage;
