@@ -1,4 +1,4 @@
-import { InputHTMLAttributes } from 'react';
+import { InputHTMLAttributes, useState } from 'react';
 
 import { UseFormRegister } from 'react-hook-form';
 
@@ -9,11 +9,18 @@ interface CVVFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   error?: string;
 }
 
+const maskCVV = (value: string) => value.replace(/\d/g, '*');
+
 const CVVField = ({
   register,
   error,
+  value,
+  onChange,
   ...props
 }: CVVFieldProps) => {
+  const [isFocused, setIsFocused] = useState(false);
+  const displayValue = isFocused ? value : maskCVV(value as string || '');
+
   return (
     <div className="flex flex-col gap-1">
       <label htmlFor="cvv" className="text-sm font-medium text-gray-700">
@@ -30,6 +37,11 @@ const CVVField = ({
             : 'border-gray-300 focus:ring-black/30'
         }`}
         {...register('cvv')}
+        value={displayValue}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+        onChange={onChange}
+        autoComplete="cc-csc"
         {...props}
       />
       {error && <span className="text-sm text-red-500">{error}</span>}

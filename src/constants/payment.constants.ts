@@ -1,4 +1,5 @@
 export const CARD_NUMBER_LENGTH = 16;
+export const AMEX_CARD_NUMBER_LENGTH = 15;
 export const CVV_LENGTH = 3;
 export const EXPIRY_DATE_FORMAT = 'MM/YY';
 

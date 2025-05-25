@@ -1,12 +1,12 @@
 import { z } from 'zod';
-import { CARD_NUMBER_LENGTH, CVV_LENGTH, CARD_PATTERNS } from '../constants/payment.constants';
+import { CARD_NUMBER_LENGTH, CVV_LENGTH, CARD_PATTERNS, AMEX_CARD_NUMBER_LENGTH } from '../constants/payment.constants';
 
 export const paymentSchema = z.object({
   cardNumber: z
     .string()
     .transform((val) => val.replace(/\s+/g, ''))
-    .refine((val) => val.length === CARD_NUMBER_LENGTH, {
-      message: 'Card number must be 16 digits',
+    .refine((val) => val.length === CARD_NUMBER_LENGTH || val.length === AMEX_CARD_NUMBER_LENGTH, {
+      message: 'Confirm card number',
     })
     .refine((val) => /^\d+$/.test(val), {
       message: 'Card number must only contain digits',
@@ -67,7 +67,7 @@ export const paymentSchema = z.object({
   zipCode: z
     .string()
     .min(5, 'Zip code must be at least 5 characters')
-    .max(5, 'Zip code must be 5 characters'),
+    .max(9, 'Zip code must be 9 characters'),
   country: z
     .string()
     .min(3, 'Country must be at least 3 characters'),

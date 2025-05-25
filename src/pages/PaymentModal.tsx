@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
 
 import { X } from "lucide-react";
+import { useDispatch } from "react-redux";
 
 import { cn } from "../utils/utils";
 import { Product } from "../types/product";
+import { Input } from "../components/ui/Input";
 import { Button } from "../components/ui/Button";
 import { usePaymentForm } from "../hooks/usePaymentForm";
 import { PaymentFormData } from "../types/payment.types";
-import { processPayment } from "../services/payment.service";
 import CVVField from "../components/forms/payment/CVVField";
+import { processPayment } from "../services/payment.service";
+import { setPaymentForm } from "../features/payment/paymentSlice";
 import CardNameField from "../components/forms/payment/CardNameField";
 import CardNumberField from "../components/forms/payment/CardNumberField";
 import ExpiryDateField from "../components/forms/payment/ExpiryDateField";
-import { Input } from "../components/ui/Input";
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -26,6 +28,8 @@ const PaymentModal = ({ isOpen, onClose, onExited, product }: PaymentModalProps)
   const [show, setShow] = useState(isOpen);
   const [animation, setAnimation] = useState("in");
 
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
@@ -37,14 +41,16 @@ const PaymentModal = ({ isOpen, onClose, onExited, product }: PaymentModalProps)
   } = usePaymentForm();
 
   const onSubmit = async (data: PaymentFormData) => {
+    console.log(data);
     try {
       setIsProcessing(true);
+      dispatch(setPaymentForm(data));
       const response = await processPayment(data);
 
       if (response.success) {
         // Aquí puedes manejar el éxito del pago
         console.log('Pago exitoso:', response.transactionId);
-        onClose();
+        // onClose();
       } else {
         // Aquí puedes manejar el error del pago
         console.error('Error en el pago:', response.error)
@@ -104,11 +110,15 @@ const PaymentModal = ({ isOpen, onClose, onExited, product }: PaymentModalProps)
               register={register}
               error={errors.expiryDate?.message}
               formatExpiryDate={formatExpiryDate}
+              value={watch('expiryDate')}
+              onChange={e => setValue('expiryDate', e.target.value, { shouldValidate: true })}
             />
 
             <CVVField
               register={register}
               error={errors.cvv?.message}
+              value={watch('cvv')}
+              onChange={e => setValue('cvv', e.target.value, { shouldValidate: true })}
             />
           </div>
 
@@ -127,12 +137,20 @@ const PaymentModal = ({ isOpen, onClose, onExited, product }: PaymentModalProps)
               placeholder="Full name"
             />
 
-            <Input
-              label="Address"
-              {...register('address')}
-              error={errors.address?.message}
-              placeholder="Address"
-            />
+            <div className="grid grid-cols-2 gap-4">
+              <Input
+                label="Country"
+                {...register('country')}
+                error={errors.country?.message}
+                placeholder="Country"
+              />
+              <Input
+                label="Address"
+                {...register('address')}
+                error={errors.address?.message}
+                placeholder="Address"
+              />
+            </div>
             <div className="grid grid-cols-2 gap-4">
               <Input
                 label="City"

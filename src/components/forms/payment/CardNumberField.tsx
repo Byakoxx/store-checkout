@@ -1,11 +1,10 @@
-import { InputHTMLAttributes, useMemo } from 'react';
+import { InputHTMLAttributes, useMemo, useState } from 'react';
 import { UseFormRegister, UseFormSetValue } from 'react-hook-form';
 
 import { PaymentFormData } from '../../../schemas/payment.schema';
 import visaLogo from '../../../assets/visa.svg';
 import mcLogo from '../../../assets/mastercard.svg';
 import amexLogo from '../../../assets/amex.svg';
-
 
 interface CardNumberFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   register: UseFormRegister<PaymentFormData>;
@@ -27,6 +26,10 @@ const CARD_LOGOS: Record<string, string> = {
   amex: amexLogo,
 };
 
+const maskCardNumber = (value: string) => {
+  return value.replace(/\d/g, '*');
+};
+
 const CardNumberField = ({
   register,
   setValue,
@@ -35,22 +38,25 @@ const CardNumberField = ({
   value,
   ...props
 }: CardNumberFieldProps) => {
-
+  const [isFocused, setIsFocused] = useState(false);
 
   const cardType = useMemo(() => {
     const val = typeof value === 'string' ? value.replace(/\s+/g, '') : '';
+    if (CARD_PATTERNS.amex.test(val)) return 'amex';
     if (CARD_PATTERNS.visa.test(val)) return 'visa';
     if (CARD_PATTERNS.mastercard.test(val)) return 'mastercard';
-    if (CARD_PATTERNS.amex.test(val)) return 'amex';
     return null;
   }, [value]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     let raw = e.target.value.replace(/\D/g, '');
-    if (raw.length > 16) raw = raw.slice(0, 16);
+    let maxLength = cardType === 'amex' ? 15 : 16;
+    if (raw.length > maxLength) raw = raw.slice(0, maxLength);
     const formatted = formatCardNumber(raw);
     setValue('cardNumber', formatted, { shouldValidate: true });
   };
+
+  const displayValue = isFocused ? value : maskCardNumber(value);
 
   return (
     <div className="flex flex-col gap-1">
@@ -68,8 +74,11 @@ const CardNumberField = ({
               ? 'border-red-500 focus:ring-red-200'
               : 'border-gray-300 focus:ring-black/30'
           }`}
-          value={value}
+          value={displayValue}
           onChange={handleChange}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
+          autoComplete="cc-number"
           {...props}
         />
         {cardType && (

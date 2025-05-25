@@ -1,4 +1,4 @@
-import { InputHTMLAttributes } from 'react';
+import { InputHTMLAttributes, useState } from 'react';
 
 import { UseFormRegister } from 'react-hook-form';
 
@@ -8,14 +8,23 @@ interface ExpiryDateFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   register: UseFormRegister<PaymentFormData>;
   error?: string;
   formatExpiryDate: (value: string) => string;
+  value: string;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
+
+const maskExpiry = (value: string) => value.replace(/\d/g, '*');
 
 const ExpiryDateField = ({
   register,
   error,
   formatExpiryDate,
+  value,
+  onChange,
   ...props
 }: ExpiryDateFieldProps) => {
+  const [isFocused, setIsFocused] = useState(false);
+  const displayValue = isFocused ? value : maskExpiry(value || '');
+
   return (
     <div className="flex flex-col gap-1">
       <label htmlFor="expiryDate" className="text-sm font-medium text-gray-700">
@@ -36,6 +45,11 @@ const ExpiryDateField = ({
             e.target.value = formatted;
           },
         })}
+        value={displayValue}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+        onChange={onChange}
+        autoComplete="cc-exp"
         {...props}
       />
       {error && <span className="text-sm text-red-500">{error}</span>}
