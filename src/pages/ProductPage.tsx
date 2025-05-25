@@ -35,6 +35,7 @@ export const ProductPage: React.FC = () => {
   // Selectors
   const products = useSelector((state: RootState) => state.product.products);
   const status = useSelector((state: RootState) => state.product.status);
+  const currentStep = useSelector((state: RootState) => state.transaction.currentStep);
 
   // Dispatch
   const dispatch = useDispatch();
@@ -70,7 +71,7 @@ export const ProductPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 relative">
       <div className="max-w-md mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold text-foreground mb-8 text-center">PayFlow Store</h1>
         <Card className="grid gap-8 bg-white p-5 shadow-2xl">
@@ -92,7 +93,7 @@ export const ProductPage: React.FC = () => {
                 <StockDisplay stock={product.stock} />
                 <Button
                   className="w-full bg-foreground text-background py-4 px-6 rounded-2xl font-medium hover:bg-muted transition-colors"
-                  onClick={() => handlePaymentClick(product.id as unknown as Product)}
+                  onClick={() => handlePaymentClick(product)}
                 >
                   <ShoppingCart className="mr-2 h-5 w-5" />
                   Pay with credit card
@@ -106,13 +107,16 @@ export const ProductPage: React.FC = () => {
         </div>
       </div>
 
-      {modalShouldRender && selectedProduct && (
-        <PaymentModal
-          isOpen={isPaymentModalOpen}
-          onClose={handleModalClose}
-          onExited={handleModalExited}
-          product={selectedProduct}
-        />
+      {/* Front layer: PaymentModal tipo Backdrop */}
+      {modalShouldRender && selectedProduct && isPaymentModalOpen && currentStep !== 'summary' && (
+        <div className={`fixed left-0 right-0 bottom-0 z-40 transition-transform duration-300 ${isPaymentModalOpen ? 'translate-y-0' : 'translate-y-full'} max-w-md mx-auto`} style={{ minHeight: '60vh', maxHeight: '100vh' }}>
+          <PaymentModal
+            isOpen={isPaymentModalOpen}
+            onClose={handleModalClose}
+            onExited={handleModalExited}
+            product={selectedProduct}
+          />
+        </div>
       )}
     </div>
   );

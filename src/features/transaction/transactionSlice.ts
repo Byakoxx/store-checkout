@@ -75,7 +75,8 @@ export const {
   clearCurrentTransaction,
   setTransactions,
   setStatus,
-  setError
+  setError,
+  setCurrentStep
 } = transactionSlice.actions
 
 export default transactionSlice.reducer

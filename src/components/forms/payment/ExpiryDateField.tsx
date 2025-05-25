@@ -23,7 +23,16 @@ const ExpiryDateField = ({
   ...props
 }: ExpiryDateFieldProps) => {
   const [isFocused, setIsFocused] = useState(false);
-  const displayValue = isFocused ? value : maskExpiry(value || '');
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let raw = e.target.value.replace(/[^0-9]/g, '');
+    if (raw.length > 4) raw = raw.slice(0, 4);
+    const formatted = formatExpiryDate(raw);
+    onChange({ ...e, target: { ...e.target, value: formatted } });
+  };
+
+  const safeValue = value || '';
+  const displayValue = isFocused ? formatExpiryDate(safeValue.replace(/[^0-9]/g, '').slice(0, 4)) : maskExpiry(safeValue);
 
   return (
     <div className="flex flex-col gap-1">
@@ -39,16 +48,11 @@ const ExpiryDateField = ({
             ? 'border-red-500 focus:ring-red-200'
             : 'border-gray-300 focus:ring-black/30'
           }`}
-        {...register('expiryDate', {
-          onChange: (e) => {
-            const formatted = formatExpiryDate(e.target.value);
-            e.target.value = formatted;
-          },
-        })}
+        {...register('expiryDate')}
         value={displayValue}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
-        onChange={onChange}
+        onChange={handleChange}
         autoComplete="cc-exp"
         {...props}
       />
