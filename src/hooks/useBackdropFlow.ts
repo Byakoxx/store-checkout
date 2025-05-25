@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 
@@ -54,6 +54,14 @@ export function useBackdropFlow() {
   const handleExpand = () => setFrontLayerState('expanded');
   const handleReveal = () => setFrontLayerState('revealed');
 
+  const resetFlow = () => {
+    setSelectedProduct(null);
+    setFrontLayerType(null);
+    setShowFrontLayer(false);
+    setFrontLayerState('revealed');
+    setRemountKey((k) => k + 1);
+  };
+
   return {
     currentStep,
     frontLayerState,
@@ -67,5 +75,6 @@ export function useBackdropFlow() {
     handleExpand,
     handleReveal,
     setFrontLayerState,
+    resetFlow,
   };
 }

@@ -17,14 +17,19 @@ function App() {
     handleExpand,
     handleReveal,
     setFrontLayerState,
+    resetFlow,
   } = useBackdropFlow();
 
   const { handlePaymentConfirm, handleCloseSummary, handleSummaryConfirm } = useBackdropTransition({
     setFrontLayerState,
   });
 
+  const handleResultContinue = () => {
+    resetFlow();
+  };
+
   if (currentStep === 'result') {
-    return <ResultPage />;
+    return <ResultPage onContinue={handleResultContinue} />;
   }
 
   return (
@@ -54,7 +59,6 @@ function App() {
                 onClose={handleCloseSummary}
                 frontLayerState={frontLayerState}
                 onExpand={handleExpand}
-                onReveal={handleReveal}
               />
             )}
           </div>
