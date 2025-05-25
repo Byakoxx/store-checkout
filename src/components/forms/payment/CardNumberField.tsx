@@ -38,7 +38,8 @@ const CardNumberField = ({
     setValue('cardNumber', formatted, { shouldValidate: true });
   };
 
-  const displayValue = isFocused ? value : maskCardNumber(value);
+  const safeValue = value || "";
+  const displayValue = isFocused ? safeValue : maskCardNumber(safeValue);
 
   return (
     <div className="flex flex-col gap-1">

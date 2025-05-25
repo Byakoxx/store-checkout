@@ -7,7 +7,6 @@ import jcbLogo from '../assets/jcb.svg';
 import unionpayLogo from '../assets/unionpay.svg';
 import mirLogo from '../assets/mir.svg';
 import maestroLogo from '../assets/maestro.svg';
-// ...otros logos
 
 const CARD_PATTERNS = {
   visa: /^4[0-9]{0,}/,
@@ -33,8 +32,8 @@ export const CARD_LOGOS: Record<string, string> = {
   maestro: maestroLogo,
 };
 
-export function detectCardType(value: string): string | null {
-  const val = value.replace(/\s+/g, '');
+export function detectCardType(value: string | undefined | null): string | null {
+  const val = typeof value === 'string' ? value.replace(/\s+/g, '') : '';
   for (const [type, pattern] of Object.entries(CARD_PATTERNS)) {
     if (pattern.test(val)) return type;
   }
