@@ -72,6 +72,7 @@ export const ProductPage = ({ onStartPayment }: ProductPageProps) => {
                 <p className="text-muted-foreground text-sm mb-4">{product.description}</p>
                 <StockDisplay stock={product.stock} />
                 <Button
+                  aria-label="Pay with credit card"
                   className="w-full bg-foreground text-background py-4 px-6 rounded-2xl font-medium hover:bg-muted transition-colors"
                   onClick={() => handlePaymentClick(product)}
                 >

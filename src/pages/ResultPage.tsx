@@ -29,7 +29,7 @@ const ResultPage = ({ onContinue }: ResultPageProps) => {
 
   const isSuccess = result === "success"
 
-  if(isProcessing) {
+  if (isProcessing) {
     return (
       <div className="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center p-4">
         <div className="flex flex-col items-center text-center max-w-md">
@@ -67,7 +67,12 @@ const ResultPage = ({ onContinue }: ResultPageProps) => {
             : "An error occurred while processing your payment. Please try again or use another payment method."}
         </p>
 
-        <Button onClick={handleContinue} className="w-full py-6 text-lg" variant={isSuccess ? "default" : "outline"}>
+        <Button
+          aria-label="Return to the store"
+          onClick={handleContinue}
+          className="w-full py-6 text-lg"
+          variant={isSuccess ? "default" : "outline"}
+        >
           <Home className="mr-2 h-5 w-5" />
           {isSuccess ? "Return to the store" : "Try again"}
         </Button>
