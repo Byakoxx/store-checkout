@@ -22,7 +22,12 @@ export function useBackdropTransition({ setFrontLayerState }: UseBackdropTransit
     }
   }, [pendingStep, dispatch]);
 
-  const handleConfirm = () => {
+  const handlePaymentConfirm = () => {
+    setFrontLayerState('revealed');
+    setPendingStep('summary');
+  };
+
+  const handleSummaryConfirm = () => {
     setFrontLayerState('revealed');
     setPendingStep('result');
   };
@@ -33,7 +38,8 @@ export function useBackdropTransition({ setFrontLayerState }: UseBackdropTransit
   };
 
   return {
-    handleConfirm,
+    handlePaymentConfirm,
     handleCloseSummary,
+    handleSummaryConfirm
   };
 }

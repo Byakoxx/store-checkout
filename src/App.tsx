@@ -19,7 +19,7 @@ function App() {
     setFrontLayerState,
   } = useBackdropFlow();
 
-  const { handleConfirm, handleCloseSummary } = useBackdropTransition({
+  const { handlePaymentConfirm, handleCloseSummary, handleSummaryConfirm } = useBackdropTransition({
     setFrontLayerState,
   });
 
@@ -45,12 +45,12 @@ function App() {
                 frontLayerState={frontLayerState}
                 onExpand={handleExpand}
                 onReveal={handleReveal}
-                onContinue={handleConfirm}
+                onContinue={handlePaymentConfirm}
               />
             )}
             {frontLayerType === 'summary' && (
               <SummaryBackdrop
-                onConfirm={handleConfirm}
+                onConfirm={handleSummaryConfirm}
                 onClose={handleCloseSummary}
                 frontLayerState={frontLayerState}
                 onExpand={handleExpand}

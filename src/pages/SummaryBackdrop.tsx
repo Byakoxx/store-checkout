@@ -3,6 +3,7 @@ import { RootState } from "../app/store";
 import { Button } from "../components/ui/Button";
 import { ArrowLeft, Check } from "lucide-react";
 import placeholder from "../assets/svg/product/placeholder.svg";
+import { useState } from "react";
 
 const BASE_FEE = 5.00;
 const DELIVERY_FEE = 3.00;
@@ -16,12 +17,24 @@ interface SummaryBackdropProps {
 }
 
 const SummaryBackdrop = ({ onConfirm, onClose, frontLayerState, onExpand, onReveal }: SummaryBackdropProps) => {
+  const [isProcessing, setIsProcessing] = useState(false);
   const product = useSelector((state: RootState) => state.payment.form.product);
+  const form = useSelector((state: RootState) => state.payment.form);
 
   console.log('product', product);
 
   const basePrice = product?.price || 0;
   const total = basePrice + BASE_FEE + DELIVERY_FEE;
+
+  const handleConfirmClick = () => {
+    setIsProcessing(true);
+    setTimeout(() => {
+      setIsProcessing(false);
+      setTimeout(() => {
+        onConfirm();
+      }, 1000);
+    }, 2000);
+  };
 
   return (
     <div className="w-full h-full bg-white rounded-t-2xl shadow-2xl p-6 flex flex-col relative" style={{ minHeight: '320px' }}>
@@ -76,10 +89,9 @@ const SummaryBackdrop = ({ onConfirm, onClose, frontLayerState, onExpand, onReve
           <span className="font-semibold text-sm">${total.toFixed(2)}</span>
         </div>
       </div>
-      <Button className="w-full py-3 text-lg" onClick={onConfirm}>
-        <Check className="h-4 w-4 mr-1" />
-        Confirm payment
-      </Button>
+        <Button className="w-full py-3 text-lg" onClick={handleConfirmClick} disabled={isProcessing}>
+          {isProcessing ? 'Processing payment...' : 'Confirm payment'}
+        </Button>
     </div>
   );
 };
