@@ -39,9 +39,16 @@ export const productSlice = createSlice({
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
     },
+    reduceStock: (state, action: PayloadAction<{ productId: string; quantity: number }>) => {
+      const { productId, quantity } = action.payload;
+      const product = state.products.find(p => p.id === productId);
+      if (product) {
+        product.stock = Math.max(0, product.stock - quantity);
+      }
+    },
   },
 });
 
-export const { addProduct, updateStock, removeProduct, setProducts, setStatus, setError } = productSlice.actions;
+export const { addProduct, updateStock, removeProduct, setProducts, setStatus, setError, reduceStock } = productSlice.actions;
 
 export default productSlice.reducer;

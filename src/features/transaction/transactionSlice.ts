@@ -16,6 +16,7 @@ interface TransactionState {
   status: 'idle' | 'loading' | 'failed'
   error: string | null,
   currentStep: 'product' | 'summary' | 'result'
+  isProcessing: boolean
 }
 
 const initialState: TransactionState = {
@@ -23,7 +24,8 @@ const initialState: TransactionState = {
   currentTransaction: null,
   status: 'idle',
   error: null,
-  currentStep: 'product'
+  currentStep: 'product',
+  isProcessing: false
 }
 
 export const transactionSlice = createSlice({
@@ -64,6 +66,9 @@ export const transactionSlice = createSlice({
     },
     setCurrentStep: (state, action: PayloadAction<'product' | 'summary' | 'result'>) => {
       state.currentStep = action.payload
+    },
+    setProcessing: (state, action: PayloadAction<boolean>) => {
+      state.isProcessing = action.payload
     }
   }
 })
@@ -76,7 +81,8 @@ export const {
   setTransactions,
   setStatus,
   setError,
-  setCurrentStep
+  setCurrentStep,
+  setProcessing
 } = transactionSlice.actions
 
 export default transactionSlice.reducer

@@ -1,9 +1,10 @@
 import { useSelector, useDispatch } from "react-redux";
+import { ArrowLeft, CreditCard, Truck } from "lucide-react";
+
 import { RootState } from "../app/store";
 import { Button } from "../components/ui/Button";
-import { ArrowLeft, Check, CreditCard, Truck } from "lucide-react";
 import placeholder from "../assets/svg/product/placeholder.svg";
-import { useState } from "react";
+import { setProcessing } from '../features/transaction/transactionSlice';
 
 const BASE_FEE = 5.00;
 const DELIVERY_FEE = 3.00;
@@ -16,21 +17,20 @@ interface SummaryBackdropProps {
 }
 
 const SummaryBackdrop = ({ onConfirm, onClose, frontLayerState, onExpand }: SummaryBackdropProps) => {
-  const [isProcessing, setIsProcessing] = useState(false);
+  const dispatch = useDispatch();
+  const isProcessing = useSelector((state: RootState) => state.transaction.isProcessing);
   const product = useSelector((state: RootState) => state.payment.form.product);
   const form = useSelector((state: RootState) => state.payment.form);
-
-  console.log('product', product);
 
   const basePrice = product?.price || 0;
   const total = basePrice + BASE_FEE + DELIVERY_FEE;
 
   const handleConfirmClick = () => {
-    setIsProcessing(true);
+    dispatch(setProcessing(true));
+    onConfirm();
     setTimeout(() => {
+      dispatch(setProcessing(false));
       setTimeout(() => {
-        setIsProcessing(false);
-        onConfirm();
       }, 1000);
     }, 2000);
   };

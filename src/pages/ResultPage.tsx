@@ -1,16 +1,32 @@
 import { motion } from "framer-motion";
+import { useDispatch, useSelector } from 'react-redux';
 import { Home, XCircle, CheckCircle2 } from "lucide-react";
 
+import { RootState } from "../app/store";
 import logo from "../assets/svg/logo.svg";
 import { Button } from "../components/ui/Button";
+import { reduceStock } from "../features/product/productSlice";
+import { clearPaymentForm } from '../features/payment/paymentSlice';
+import { setCurrentStep } from '../features/transaction/transactionSlice';
 
 interface ResultPageProps {
-  isProcessing: boolean;
-  result: "success" | "error";
-  onContinue: () => void;
+  onContinue?: () => void;
 }
 
-const ResultPage = ({ isProcessing = true, result = "success", onContinue }: ResultPageProps) => {
+const ResultPage = ({ onContinue }: ResultPageProps) => {
+  const dispatch = useDispatch();
+  const isProcessing = useSelector((state: RootState) => state.transaction.isProcessing);
+  const product = useSelector((state: RootState) => state.payment.form.product);
+  const result: 'success' | 'error' = 'success';
+
+  dispatch(reduceStock({ productId: product.id, quantity: 1 }));
+
+  const handleContinue = () => {
+    dispatch(clearPaymentForm());
+    dispatch(setCurrentStep('product'));
+    if (onContinue) onContinue();
+  };
+
   const isSuccess = result === "success"
 
   if(isProcessing) {
@@ -51,7 +67,7 @@ const ResultPage = ({ isProcessing = true, result = "success", onContinue }: Res
             : "An error occurred while processing your payment. Please try again or use another payment method."}
         </p>
 
-        <Button onClick={onContinue} className="w-full py-6 text-lg" variant={isSuccess ? "default" : "outline"}>
+        <Button onClick={handleContinue} className="w-full py-6 text-lg" variant={isSuccess ? "default" : "outline"}>
           <Home className="mr-2 h-5 w-5" />
           {isSuccess ? "Return to the store" : "Try again"}
         </Button>

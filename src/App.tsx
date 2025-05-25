@@ -17,14 +17,19 @@ function App() {
     handleExpand,
     handleReveal,
     setFrontLayerState,
+    resetFlow,
   } = useBackdropFlow();
 
   const { handlePaymentConfirm, handleCloseSummary, handleSummaryConfirm } = useBackdropTransition({
     setFrontLayerState,
   });
 
+  const handleResultContinue = () => {
+    resetFlow();
+  };
+
   if (currentStep === 'result') {
-    return <ResultPage isProcessing={false} onContinue={() => {}} result="success" />;
+    return <ResultPage onContinue={handleResultContinue} />;
   }
 
   return (
