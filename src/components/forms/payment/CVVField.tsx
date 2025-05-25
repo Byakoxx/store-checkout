@@ -2,7 +2,7 @@ import { InputHTMLAttributes } from 'react';
 
 import { UseFormRegister } from 'react-hook-form';
 
-import { PaymentFormData } from '../../../types/payment.types';
+import { PaymentFormData } from '../../../schemas/payment.schema';
 
 interface CVVFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   register: UseFormRegister<PaymentFormData>;
@@ -24,7 +24,7 @@ const CVVField = ({
         type="text"
         maxLength={3}
         placeholder="123"
-        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${
+        className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
           error
             ? 'border-red-500 focus:ring-red-200'
             : 'border-gray-300 focus:ring-blue-200'

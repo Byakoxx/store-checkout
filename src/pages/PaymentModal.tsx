@@ -12,6 +12,7 @@ import CVVField from "../components/forms/payment/CVVField";
 import CardNameField from "../components/forms/payment/CardNameField";
 import CardNumberField from "../components/forms/payment/CardNumberField";
 import ExpiryDateField from "../components/forms/payment/ExpiryDateField";
+import { Input } from "../components/ui/Input";
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -53,6 +54,7 @@ const PaymentModal = ({ isOpen, onClose, onExited, product }: PaymentModalProps)
     }
   };
 
+  // Animación de entrada y salida del modal
   useEffect(() => {
     if (isOpen) {
       setShow(true);
@@ -93,11 +95,6 @@ const PaymentModal = ({ isOpen, onClose, onExited, product }: PaymentModalProps)
             formatCardNumber={formatCardNumber}
           />
 
-          <CardNameField
-            register={register}
-            error={errors.cardName?.message}
-          />
-
           <div className="grid grid-cols-2 gap-4">
             <ExpiryDateField
               register={register}
@@ -111,11 +108,45 @@ const PaymentModal = ({ isOpen, onClose, onExited, product }: PaymentModalProps)
             />
           </div>
 
+          <CardNameField
+            register={register}
+            error={errors.cardName?.message}
+          />
+
+          <div className="space-y-4 pt-4 border-t">
+            <h3 className="font-medium text-lg">Información de envío</h3>
+
+            <Input
+              {...register('fullName')}
+              error={errors.fullName?.message}
+              placeholder="Nombre completo"
+            />
+
+            <Input
+              {...register('address')}
+              error={errors.address?.message}
+              placeholder="Dirección"
+            />
+            <div className="grid grid-cols-2 gap-4">
+              <Input
+                {...register('city')}
+                error={errors.city?.message}
+                placeholder="Ciudad"
+              />
+              <Input
+                {...register('zipCode')}
+                error={errors.zipCode?.message}
+                placeholder="Código postal"
+              />
+            </div>
+          </div>
+
+
           {/* FOOTER */}
           <div className="pt-4">
             <Button
               type="submit"
-              className="w-full py-6 text-lg"
+              className="w-full py-6 text-lg rounded-lg"
               disabled={isProcessing}
             >
               {isProcessing ? 'Procesando pago...' : 'Pagar ahora'}

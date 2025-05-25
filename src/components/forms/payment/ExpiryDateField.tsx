@@ -2,7 +2,7 @@ import { InputHTMLAttributes } from 'react';
 
 import { UseFormRegister } from 'react-hook-form';
 
-import { PaymentFormData } from '../../../types/payment.types';
+import { PaymentFormData } from '../../../schemas/payment.schema';
 
 interface ExpiryDateFieldProps extends InputHTMLAttributes<HTMLInputElement> {
   register: UseFormRegister<PaymentFormData>;
@@ -26,7 +26,7 @@ const ExpiryDateField = ({
         type="text"
         maxLength={5}
         placeholder="MM/YY"
-        className={`w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 ${error
+        className={`w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 ${error
             ? 'border-red-500 focus:ring-red-200'
             : 'border-gray-300 focus:ring-blue-200'
           }`}

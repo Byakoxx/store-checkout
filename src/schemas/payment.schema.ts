@@ -50,6 +50,27 @@ export const paymentSchema = z.object({
     .min(CVV_LENGTH, `El CVV debe tener ${CVV_LENGTH} dígitos`)
     .max(CVV_LENGTH, `El CVV debe tener ${CVV_LENGTH} dígitos`)
     .regex(/^\d+$/, 'El CVV solo debe contener dígitos'),
+  fullName: z
+    .string()
+    .min(3, 'El nombre debe tener al menos 3 caracteres')
+    .max(50, 'El nombre debe tener menos de 50 caracteres')
+    .refine((val) => /^[a-zA-ZáéíóúñÁÉÍÓÚÑ\s]*$/.test(val), {
+      message: 'El nombre solo debe contener letras y espacios',
+    }),
+  address: z
+    .string()
+    .min(3, 'La dirección debe tener al menos 3 caracteres')
+    .max(100, 'La dirección debe tener menos de 100 caracteres'),
+  city: z
+    .string()
+    .min(3, 'La ciudad debe tener al menos 3 caracteres'),
+  zipCode: z
+    .string()
+    .min(5, 'El código postal debe tener al menos 5 caracteres')
+    .max(5, 'El código postal debe tener 5 caracteres'),
+  country: z
+    .string()
+    .min(3, 'El país debe tener al menos 3 caracteres'),
 });
 
 export type PaymentFormData = z.infer<typeof paymentSchema>
