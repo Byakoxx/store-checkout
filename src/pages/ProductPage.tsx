@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import { ShoppingCart } from "lucide-react";
 import { useDispatch, useSelector } from 'react-redux';
 
 import { RootState } from '../app/store';
-import PaymentModal from './PaymentModal';
 import { Product } from '../types/product';
 import { Button } from '../components/ui/Button';
 import { Card, CardContent } from '../components/ui/Card';
@@ -24,42 +23,19 @@ const mockProducts: Product[] = [
   }
 ];
 
-export const ProductPage: React.FC = () => {
+interface ProductPageProps {
+  onStartPayment: (product: Product) => void;
+}
 
-  // State
-  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
-  const [modalShouldRender, setModalShouldRender] = useState(false);
-
-
+export const ProductPage = ({ onStartPayment }: ProductPageProps) => {
   // Selectors
   const products = useSelector((state: RootState) => state.product.products);
   const status = useSelector((state: RootState) => state.product.status);
-  const currentStep = useSelector((state: RootState) => state.transaction.currentStep);
-
-  // Dispatch
   const dispatch = useDispatch();
-
-  // Handlers
-  const handlePaymentClick = (product: Product) => {
-    setSelectedProduct(product);
-    setIsPaymentModalOpen(true);
-    setModalShouldRender(true);
-  };
-
-  const handleModalClose = () => {
-    setIsPaymentModalOpen(false);
-  };
-
-  const handleModalExited = () => {
-    setModalShouldRender(false);
-    setSelectedProduct(null);
-  };
 
   useEffect(() => {
     // Simular carga de API
     dispatch(setStatus('loading'));
-    // Simular delay de red
     setTimeout(() => {
       dispatch(setProducts(mockProducts));
       dispatch(setStatus('idle'));
@@ -68,6 +44,11 @@ export const ProductPage: React.FC = () => {
 
   if (status === 'loading') {
     return <ProductSkeleton />;
+  }
+
+  // Al hacer click en pagar, llama a la prop onStartPayment con el producto
+  const handlePaymentClick = (product: Product) => {
+    onStartPayment(product);
   };
 
   return (
@@ -106,18 +87,6 @@ export const ProductPage: React.FC = () => {
           © {new Date().getFullYear()} PayFlow Store. All rights reserved.
         </div>
       </div>
-
-      {/* Front layer: PaymentModal tipo Backdrop */}
-      {modalShouldRender && selectedProduct && isPaymentModalOpen && currentStep !== 'summary' && (
-        <div className={`fixed left-0 right-0 bottom-0 z-40 transition-transform duration-300 ${isPaymentModalOpen ? 'translate-y-0' : 'translate-y-full'} max-w-md mx-auto`} style={{ minHeight: '60vh', maxHeight: '100vh' }}>
-          <PaymentModal
-            isOpen={isPaymentModalOpen}
-            onClose={handleModalClose}
-            onExited={handleModalExited}
-            product={selectedProduct}
-          />
-        </div>
-      )}
     </div>
   );
 };

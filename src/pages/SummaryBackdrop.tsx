@@ -5,7 +5,7 @@ import { Button } from "../components/ui/Button";
 const BASE_FEE = 5.00;
 const DELIVERY_FEE = 3.00;
 
-const SummaryBackdrop = ({ onConfirm, onClose }: { onConfirm: () => void, onClose: () => void }) => {
+const SummaryBackdrop = ({ onConfirm, onClose, onCancel, frontLayerState, onExpand, onReveal }: { onConfirm: () => void, onClose: () => void, onCancel: () => void, frontLayerState: 'expanded' | 'revealed', onExpand: () => void, onReveal: () => void }) => {
   const product = useSelector((state: RootState) => state.payment.form.product);
   const form = useSelector((state: RootState) => state.payment.form);
 
@@ -15,15 +15,19 @@ const SummaryBackdrop = ({ onConfirm, onClose }: { onConfirm: () => void, onClos
   return (
     <div className="w-full h-full bg-white rounded-t-2xl shadow-2xl p-6 flex flex-col relative" style={{ minHeight: '320px' }}>
       {/* Handle visual */}
-      <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-4" />
+      <div
+        className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-4 cursor-pointer"
+        onClick={frontLayerState === 'expanded' ? onReveal : onExpand}
+        title={frontLayerState === 'expanded' ? 'Revelar productos' : 'Expandir resumen'}
+      />
       {/* Botón atrás y título */}
       <div className="flex items-center mb-4">
         <button
           className="text-gray-500 hover:text-gray-800 font-medium mr-2"
           onClick={onClose}
-          aria-label="Atrás"
+          aria-label="Back"
         >
-          ← Atrás
+          ← Back
         </button>
         <h2 className="text-xl font-bold flex-1 text-center">Resumen de pago</h2>
         <span className="w-12" /> {/* Espaciador para centrar el título */}
@@ -53,7 +57,7 @@ const SummaryBackdrop = ({ onConfirm, onClose }: { onConfirm: () => void, onClos
       <Button className="w-full py-3 text-lg" onClick={onConfirm}>
         Confirmar pago
       </Button>
-      <button className="mt-4 w-full text-center text-muted-foreground" onClick={onClose}>
+      <button className="mt-4 w-full text-center text-muted-foreground" onClick={onCancel}>
         Cancelar
       </button>
     </div>

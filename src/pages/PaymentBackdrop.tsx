@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 
 import { X } from "lucide-react";
-import { useDispatch } from "react-redux";
 
 import { cn } from "../utils/utils";
 import { Product } from "../types/product";
@@ -16,20 +16,26 @@ import CardNameField from "../components/forms/payment/CardNameField";
 import CardNumberField from "../components/forms/payment/CardNumberField";
 import ExpiryDateField from "../components/forms/payment/ExpiryDateField";
 import { setCurrentStep } from "../features/transaction/transactionSlice";
+import { RootState } from "../app/store";
 
-interface PaymentModalProps {
+interface PaymentBackdropProps {
   isOpen: boolean;
   onClose: () => void;
   onExited: () => void;
   product: Product;
+  frontLayerState: 'expanded' | 'revealed';
+  onExpand: () => void;
+  onReveal: () => void;
+  onContinue: () => void;
 }
 
-const PaymentModal = ({ isOpen, onClose, onExited, product }: PaymentModalProps) => {
+const PaymentBackdrop = ({ isOpen, onClose, onExited, product, frontLayerState, onExpand, onReveal, onContinue }: PaymentBackdropProps) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [show, setShow] = useState(isOpen);
   const [animation, setAnimation] = useState("in");
 
   const dispatch = useDispatch();
+  const paymentForm = useSelector((state: RootState) => state.payment.form);
 
   const {
     register,
@@ -39,12 +45,13 @@ const PaymentModal = ({ isOpen, onClose, onExited, product }: PaymentModalProps)
     formatExpiryDate,
     watch,
     setValue,
-  } = usePaymentForm();
+    reset,
+  } = usePaymentForm(paymentForm);
 
   const onSubmit = async (data: PaymentFormData) => {
     setIsProcessing(true);
     dispatch(setPaymentForm(data));
-    dispatch(setCurrentStep('summary'));
+    onContinue();
     setIsProcessing(false);
   };
 
@@ -69,16 +76,20 @@ const PaymentModal = ({ isOpen, onClose, onExited, product }: PaymentModalProps)
     <div
       className={cn(
         "w-full max-w-md mx-auto bg-white rounded-t-2xl shadow-2xl p-6 transition-transform duration-300",
-        animation === "in" ? "translate-y-0" : "translate-y-full"
+        frontLayerState === "expanded" ? "translate-y-0" : "translate-y-[85%]"
       )}
       style={{ minHeight: '60vh', maxHeight: '100vh' }}
     >
       {/* Handle visual */}
-      <div className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-4" />
+      <div
+        className="w-12 h-1.5 bg-gray-300 rounded-full mx-auto mb-4 cursor-pointer"
+        onClick={frontLayerState === 'expanded' ? onReveal : onExpand}
+        title={frontLayerState === 'expanded' ? 'Revelar productos' : 'Expandir formulario'}
+      />
       {/* HEADER */}
       <div className="flex items-center justify-between mb-4">
         <button className="text-gray-500 hover:text-gray-800 font-medium" onClick={onClose} aria-label="Atrás">
-          ← Atrás
+          ← Back
         </button>
         <h2 className="text-xl font-semibold flex-1 text-center">Payment information</h2>
         <span className="w-8" /> {/* Espaciador para centrar el título */}
@@ -163,4 +174,4 @@ const PaymentModal = ({ isOpen, onClose, onExited, product }: PaymentModalProps)
   )
 };
 
-export default PaymentModal;
+export default PaymentBackdrop;

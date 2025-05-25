@@ -2,16 +2,18 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { paymentSchema, type PaymentFormData } from '../schemas/payment.schema';
 
-export const usePaymentForm = () => {
+export const usePaymentForm = (defaultValues?: Partial<PaymentFormData>) => {
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
     watch,
     setValue,
+    reset,
   } = useForm<PaymentFormData>({
     resolver: zodResolver(paymentSchema),
     mode: 'onChange',
+    defaultValues,
   });
 
   const formatCardNumber = (value: string) => {
@@ -46,6 +48,7 @@ export const usePaymentForm = () => {
     isSubmitting,
     watch,
     setValue,
+    reset,
     formatCardNumber,
     formatExpiryDate,
   };
