@@ -116,10 +116,6 @@ function App() {
               </div>
             }
           />
-          <Route
-            path="/result"
-            element={<ResultPage onContinue={handleResultContinue} />}
-          />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
