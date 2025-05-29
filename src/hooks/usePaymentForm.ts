@@ -13,6 +13,17 @@ export const usePaymentForm = (defaultValues?: Partial<PaymentFormData>) => {
   } = useForm<PaymentFormData>({
     resolver: zodResolver(paymentSchema),
     mode: 'onChange',
+    defaultValues: {
+      cardNumber: defaultValues?.cardNumber || '',
+      cardName: defaultValues?.cardName || '',
+      expiryDate: defaultValues?.expiryDate || '',
+      cvv: defaultValues?.cvv || '',
+      fullName: defaultValues?.fullName || '',
+      address: defaultValues?.address || '',
+      city: defaultValues?.city || '',
+      zipCode: defaultValues?.zipCode || '',
+      country: defaultValues?.country || '',
+    }
   });
 
   const formatCardNumber = (value: string) => {
