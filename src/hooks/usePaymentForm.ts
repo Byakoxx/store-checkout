@@ -2,18 +2,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { paymentSchema, type PaymentFormData } from '../schemas/payment.schema';
 
-const DEFAULT_VALUES: PaymentFormData = {
-  cardNumber: '4242 4242 4242 4242',
-  cardName: 'John Doe',
-  expiryDate: '12/25',
-  cvv: '123',
-  fullName: 'John Doe',
-  country: 'United States',
-  address: '123 Main St',
-  city: 'New York',
-  zipCode: '10001',
-};
-
 export const usePaymentForm = (defaultValues?: Partial<PaymentFormData>) => {
   const {
     register,
@@ -25,7 +13,6 @@ export const usePaymentForm = (defaultValues?: Partial<PaymentFormData>) => {
   } = useForm<PaymentFormData>({
     resolver: zodResolver(paymentSchema),
     mode: 'onChange',
-    defaultValues: DEFAULT_VALUES,
   });
 
   const formatCardNumber = (value: string) => {

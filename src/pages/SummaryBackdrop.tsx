@@ -10,6 +10,9 @@ import { Button } from "../components/ui/Button";
 import { detectCardType } from "../utils/cardUtils";
 import placeholder from "../assets/svg/product/placeholder.svg";
 import { setProcessing } from '../features/transaction/transactionSlice';
+import { createTransaction } from '../services/transaction.service';
+import { tokenizeCard } from "../services/card.service";
+import { setCardToken } from "../features/payment/paymentSlice";
 
 const BASE_FEE = 5.00;
 const DELIVERY_FEE = 3.00;
@@ -51,14 +54,33 @@ const SummaryBackdrop = ({ onConfirm, onClose, frontLayerState, onExpand, formDa
 
   const cardType = detectCardType(form.cardNumber || "");
 
-  const handleConfirmClick = () => {
-    dispatch(setProcessing(true));
-    onConfirm();
-    setTimeout(() => {
+  const handleConfirmClick = async () => {
+    try {
+      dispatch(setProcessing(true));
+
+      if (!formData.product) {
+        throw new Error('Missing product information');
+      }
+
+      // Tokenizar la tarjeta solo cuando el usuario confirma
+      const tokenResponse = await tokenizeCard({
+        cardNumber: formData.cardNumber,
+        expiryDate: formData.expiryDate,
+        cvv: formData.cvv,
+        fullName: formData.fullName,
+      });
+
+      dispatch(setCardToken(tokenResponse.data.id));
+
+      // Crear la transacción con el token recién generado
+      await createTransaction(formData, tokenResponse.data.id);
+      onConfirm();
+    } catch (error) {
+      console.error('Transaction error:', error);
+      // Manejar el error apropiadamente
+    } finally {
       dispatch(setProcessing(false));
-      setTimeout(() => {
-      }, 1000);
-    }, 2000);
+    }
   };
 
   return (

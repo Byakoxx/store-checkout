@@ -4,15 +4,15 @@ import { paymentSchema } from '../../../schemas/payment.schema';
 
 describe('usePaymentForm', () => {
   const defaultValues = {
-    cardNumber: '4242 4242 4242 4242',
-    cardName: 'John Doe',
-    expiryDate: '12/25',
-    cvv: '123',
-    fullName: 'John Doe',
-    address: '123 Main St',
-    city: 'New York',
-    country: 'United States',
-    zipCode: '10001'
+    cardNumber: '',
+    cardName: '',
+    expiryDate: '',
+    cvv: '',
+    fullName: '',
+    address: '',
+    city: '',
+    country: '',
+    zipCode: ''
   };
 
   it('should initialize with default values', () => {

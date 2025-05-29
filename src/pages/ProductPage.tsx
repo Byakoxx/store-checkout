@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 
 import { ShoppingCart } from "lucide-react";
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,37 +11,42 @@ import StockDisplay from '../components/ui/StockDisplay';
 import ProductSkeleton from '../components/ProductSkeleton';
 import placeholder from '../assets/svg/product/placeholder.svg';
 import { setProducts, setStatus } from '../features/product/productSlice';
-
-// Simulación de datos de API
-const mockProducts: Product[] = [
-  {
-    id: '1',
-    name: 'Premium Wireless Headphones',
-    price: 129.99,
-    stock: 10,
-    image: 'https://via.placeholder.com/400',
-    description: 'Wireless headphones with noise cancellation, long battery life and high fidelity sound. Perfect for work and leisure.'
-  }
-];
+import { useApi } from '../hooks/useApi';
 
 interface ProductPageProps {
   onStartPayment: (product: Product) => void;
 }
 
 export const ProductPage = ({ onStartPayment }: ProductPageProps) => {
-  // Selectors
   const products = useSelector((state: RootState) => state.product.products);
   const status = useSelector((state: RootState) => state.product.status);
   const dispatch = useDispatch();
+  const { execute } = useApi<Product[]>();
+
+  const fetchProducts = useCallback(async () => {
+    if (status === 'loading' || products.length > 0) {
+      return;
+    }
+
+    dispatch(setStatus('loading'));
+    try {
+      const data = await execute('/v1/products');
+      dispatch(setProducts(data));
+      dispatch(setStatus('idle'));
+    } catch (error) {
+      dispatch(setStatus('failed'));
+      // Add a delay before retrying to prevent rapid retries
+      setTimeout(() => {
+        dispatch(setStatus('idle'));
+      }, 5000);
+    }
+  }, [dispatch, execute, status, products.length]);
 
   useEffect(() => {
-    // Simular carga de API
-    dispatch(setStatus('loading'));
-    setTimeout(() => {
-      dispatch(setProducts(mockProducts));
-      dispatch(setStatus('idle'));
-    }, 1000);
-  }, [dispatch]);
+    if (status !== 'loading' && products.length === 0) {
+      fetchProducts();
+    }
+  }, [fetchProducts, status, products.length]);
 
   if (status === 'loading') {
     return <ProductSkeleton />;

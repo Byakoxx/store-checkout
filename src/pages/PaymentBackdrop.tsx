@@ -51,9 +51,7 @@ const PaymentBackdrop = ({ isOpen, onClose, onExited, product, frontLayerState, 
   const firstInputRef = useRef<HTMLInputElement>(null);
 
   const onSubmit = async (data: PaymentFormData) => {
-    setIsProcessing(true);
-
-    const { fullName, country, address, city, zipCode } = data;
+    const { fullName, country, address, city, zipCode, cardNumber, expiryDate, cvv } = data;
     dispatch(setPaymentForm({
       product,
       fullName,
@@ -61,9 +59,11 @@ const PaymentBackdrop = ({ isOpen, onClose, onExited, product, frontLayerState, 
       address,
       city,
       zipCode,
+      cardNumber,
+      expiryDate,
+      cvv
     }));
     onContinue();
-    setIsProcessing(false);
   };
 
   // Animación de entrada y salida del modal

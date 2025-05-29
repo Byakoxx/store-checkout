@@ -85,7 +85,7 @@ Tests:       98 passed, 98 total
 ## Enlace de despliegue
 
 > **Obligatorio:**
-> [Enlace a tu app en producción](https://payhflow-vercel.com)
+> [Enlace a tu app en producción](https://store-checkout-mu.vercel.app/)
 
 ---
 
