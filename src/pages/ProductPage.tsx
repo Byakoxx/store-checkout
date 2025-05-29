@@ -12,6 +12,7 @@ import ProductSkeleton from '../components/ProductSkeleton';
 import placeholder from '../assets/svg/product/placeholder.svg';
 import { setProducts, setStatus } from '../features/product/productSlice';
 import { useApi } from '../hooks/useApi';
+import { formatMoney } from "../utils/formatters";
 
 interface ProductPageProps {
   onStartPayment: (product: Product) => void;
@@ -75,7 +76,7 @@ export const ProductPage = ({ onStartPayment }: ProductPageProps) => {
               <CardContent className="p-6">
                 <div className="flex justify-between items-start mb-4">
                   <h2 className="text-xl font-semibold text-card-foreground">{product.name}</h2>
-                  <span className="text-2xl font-bold text-primary">${product.price}</span>
+                  <span className="text-xl font-bold text-primary">{formatMoney(product.price)}</span>
                 </div>
                 <p className="text-muted-foreground text-sm mb-4">{product.description}</p>
                 <StockDisplay stock={product.stock} />

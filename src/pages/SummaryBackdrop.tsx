@@ -8,6 +8,7 @@ import { RootState } from "../app/store";
 import { PaymentFlowState } from "../App";
 import { Button } from "../components/ui/Button";
 import { detectCardType } from "../utils/cardUtils";
+import { formatMoney } from "../utils/formatters";
 import placeholder from "../assets/svg/product/placeholder.svg";
 import { setProcessing } from '../features/transaction/transactionSlice';
 import { createTransaction } from '../services/transaction.service';
@@ -103,6 +104,9 @@ const SummaryBackdrop = ({ onConfirm, onClose, frontLayerState, onExpand, formDa
         paymentId: transactionResponse.paymentId
       }));
 
+
+      await new Promise(resolve => setTimeout(resolve, 100));
+
       onConfirm();
     } catch (error: any) {
       console.error('Error en el proceso de pago:', error);
@@ -164,26 +168,26 @@ const SummaryBackdrop = ({ onConfirm, onClose, frontLayerState, onExpand, formDa
                 <h3 className="font-medium">{product?.name || 'Product'}</h3>
                 <p className="text-sm text-gray-500">Quantity: 1</p>
               </div>
-              <div className="font-semibold">${product?.price.toFixed(2) || '0.00'}</div>
+              <div className="font-semibold">{formatMoney(product?.price || 0)}</div>
             </div>
           </div>
           <div className="flex flex-col space-y-2 my-2">
             <div className="flex justify-between">
               <span className="text-sm text-gray-500">Base price:</span>
-              <span className="font-semibold text-sm">${basePrice.toFixed(2)}</span>
+              <span className="font-semibold text-sm">{formatMoney(basePrice)}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-sm text-gray-500">Fixed fee:</span>
-              <span className="font-semibold text-sm">${BASE_FEE.toFixed(2)}</span>
+              <span className="font-semibold text-sm">{formatMoney(BASE_FEE)}</span>
             </div>
             <div className="flex justify-between">
               <span className="text-sm text-gray-500">Delivery fee:</span>
-              <span className="font-semibold text-sm">${DELIVERY_FEE.toFixed(2)}</span>
+              <span className="font-semibold text-sm">{formatMoney(DELIVERY_FEE)}</span>
             </div>
           </div>
           <div className="flex justify-between font-bold border-t pt-2 mt-2">
             <span className="text-sm text-gray-500">Total:</span>
-            <span className="font-semibold text-sm">${total.toFixed(2)}</span>
+            <span className="font-semibold text-sm">{formatMoney(total)}</span>
           </div>
 
           <div className="bg-gray-50 p-3 mt-5 rounded-lg space-y-2">
