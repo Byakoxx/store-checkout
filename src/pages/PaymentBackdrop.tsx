@@ -48,9 +48,19 @@ const PaymentBackdrop = ({ isOpen, onClose, onExited, product, frontLayerState, 
     watch,
     setValue,
     reset,
-  } = usePaymentForm(formData);
+  } = usePaymentForm(paymentForm);
 
   const firstInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (paymentForm) {
+      Object.entries(paymentForm).forEach(([field, value]) => {
+        if (value && typeof value === 'string') {
+          setValue(field as keyof PaymentFormData, value);
+        }
+      });
+    }
+  }, []);
 
   const onSubmit = async (data: PaymentFormData) => {
     const { fullName, country, address, city, zipCode, cardNumber, expiryDate, cvv } = data;

@@ -154,7 +154,7 @@ const SummaryBackdrop = ({ onConfirm, onClose, frontLayerState, onExpand, formDa
         </div>
         <div className="mb-4 flex-1">
           <div className="flex justify-between">
-            <div className="flex items-center space-x-4 py-4 border-y">
+            <div className="flex items-center space-x-4 py-4 border-y w-full">
               <div className="relative w-16 h-16 flex-shrink-0">
                 <img
                   src={product?.image || placeholder}
@@ -168,7 +168,7 @@ const SummaryBackdrop = ({ onConfirm, onClose, frontLayerState, onExpand, formDa
                 <h3 className="font-medium">{product?.name || 'Product'}</h3>
                 <p className="text-sm text-gray-500">Quantity: 1</p>
               </div>
-              <div className="font-semibold">{formatMoney(product?.price || 0)}</div>
+              <div className="font-semibold text-end">{formatMoney(product?.price || 0)}</div>
             </div>
           </div>
           <div className="flex flex-col space-y-2 my-2">
