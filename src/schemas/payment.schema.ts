@@ -70,7 +70,10 @@ export const paymentSchema = z.object({
     .max(9, 'Zip code must be 9 characters'),
   country: z
     .string()
-    .min(3, 'Country must be at least 3 characters'),
+    .length(2, 'Country must be a 2-letter ISO code')
+    .refine((val) => /^[A-Z]{2}$/.test(val), {
+      message: 'Country must be a valid 2-letter ISO code',
+    }),
 });
 
 export type PaymentFormData = z.infer<typeof paymentSchema>

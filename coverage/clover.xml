@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1748211038641" clover="3.2.0">
-  <project timestamp="1748211038641" name="All files">
-    <metrics statements="238" coveredstatements="238" conditionals="67" coveredconditionals="62" methods="80" coveredmethods="76" elements="385" coveredelements="376" complexity="0" loc="238" ncloc="238" packages="8" files="15" classes="15"/>
+<coverage generated="1748212780542" clover="3.2.0">
+  <project timestamp="1748212780542" name="All files">
+    <metrics statements="237" coveredstatements="237" conditionals="65" coveredconditionals="62" methods="79" coveredmethods="76" elements="381" coveredelements="375" complexity="0" loc="237" ncloc="237" packages="8" files="15" classes="15"/>
     <package name="components.forms.payment">
       <metrics statements="48" coveredstatements="48" conditionals="36" coveredconditionals="33" methods="17" coveredmethods="17"/>
       <file name="CVVField.tsx" path="/Volumes/Disco Externo/NoSync/technical-tests/store-checkout/src/components/forms/payment/CVVField.tsx">
@@ -139,7 +139,7 @@
       </file>
     </package>
     <package name="hooks">
-      <metrics statements="105" coveredstatements="105" conditionals="18" coveredconditionals="16" methods="30" coveredmethods="26"/>
+      <metrics statements="104" coveredstatements="104" conditionals="16" coveredconditionals="16" methods="29" coveredmethods="26"/>
       <file name="useBackdropFlow.ts" path="/Volumes/Disco Externo/NoSync/technical-tests/store-checkout/src/hooks/useBackdropFlow.ts">
         <metrics statements="47" coveredstatements="47" conditionals="7" coveredconditionals="7" methods="16" coveredmethods="13"/>
         <line num="1" count="1" type="stmt"/>
@@ -241,7 +241,7 @@
         <line num="56" count="38" type="stmt"/>
       </file>
       <file name="usePersistedState.ts" path="/Volumes/Disco Externo/NoSync/technical-tests/store-checkout/src/hooks/usePersistedState.ts">
-        <metrics statements="14" coveredstatements="14" conditionals="4" coveredconditionals="2" methods="4" coveredmethods="3"/>
+        <metrics statements="13" coveredstatements="13" conditionals="2" coveredconditionals="2" methods="3" coveredmethods="3"/>
         <line num="1" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
         <line num="4" count="11" type="stmt"/>
@@ -255,7 +255,6 @@
         <line num="16" count="11" type="stmt"/>
         <line num="18" count="4" type="stmt"/>
         <line num="22" count="11" type="stmt"/>
-        <line num="30" count="1" type="cond" truecount="0" falsecount="2"/>
       </file>
     </package>
     <package name="schemas">

@@ -16,6 +16,8 @@ import { setPaymentForm } from "../features/payment/paymentSlice";
 import CardNameField from "../components/forms/payment/CardNameField";
 import CardNumberField from "../components/forms/payment/CardNumberField";
 import ExpiryDateField from "../components/forms/payment/ExpiryDateField";
+import CountrySelect from "../components/forms/payment/CountrySelect";
+import { PaymentFlowState } from "../App";
 
 interface PaymentBackdropProps {
   isOpen: boolean;
@@ -26,8 +28,8 @@ interface PaymentBackdropProps {
   onExpand: () => void;
   onReveal: () => void;
   onContinue: () => void;
-  formData: PaymentFormData;
-  onFormChange: (formData: any) => void;
+  formData: PaymentFlowState;
+  onFormChange: (formData: PaymentFlowState) => void;
 }
 
 const PaymentBackdrop = ({ isOpen, onClose, onExited, product, frontLayerState, onExpand, onReveal, onContinue, formData, onFormChange }: PaymentBackdropProps) => {
@@ -51,19 +53,23 @@ const PaymentBackdrop = ({ isOpen, onClose, onExited, product, frontLayerState, 
   const firstInputRef = useRef<HTMLInputElement>(null);
 
   const onSubmit = async (data: PaymentFormData) => {
-    setIsProcessing(true);
-
-    const { fullName, country, address, city, zipCode } = data;
-    dispatch(setPaymentForm({
+    const { fullName, country, address, city, zipCode, cardNumber, expiryDate, cvv } = data;
+    const updatedForm = {
       product,
       fullName,
       country,
       address,
       city,
       zipCode,
-    }));
+      cardNumber,
+      expiryDate,
+      cvv,
+      cardName: data.cardName || ''
+    };
+    
+    dispatch(setPaymentForm(updatedForm));
+    onFormChange(updatedForm);
     onContinue();
-    setIsProcessing(false);
   };
 
   // Animación de entrada y salida del modal
@@ -104,8 +110,41 @@ const PaymentBackdrop = ({ isOpen, onClose, onExited, product, frontLayerState, 
   }, [isOpen, onClose]);
 
   useEffect(() => {
-    onFormChange(watch());
-  }, [watch, onFormChange]);
+    const subscription = watch((value) => {
+
+      onFormChange({
+        cardNumber: value.cardNumber || '',
+        cardName: value.cardName || '',
+        expiryDate: value.expiryDate || '',
+        cvv: value.cvv || '',
+        fullName: value.fullName || '',
+        address: value.address || '',
+        city: value.city || '',
+        zipCode: value.zipCode || '',
+        country: value.country || '',
+        product: formData.product || product
+      });
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, onFormChange, product, formData.product]);
+
+  useEffect(() => {
+    if (product && (!formData.product || formData.product.id !== product.id)) {
+      onFormChange({
+        ...formData,
+        cardNumber: formData.cardNumber || '',
+        cardName: formData.cardName || '',
+        expiryDate: formData.expiryDate || '',
+        cvv: formData.cvv || '',
+        fullName: formData.fullName || '',
+        address: formData.address || '',
+        city: formData.city || '',
+        zipCode: formData.zipCode || '',
+        country: formData.country || '',
+        product
+      });
+    }
+  }, [product, formData, onFormChange]);
 
   if (!show) return null;
 
@@ -178,11 +217,9 @@ const PaymentBackdrop = ({ isOpen, onClose, onExited, product, frontLayerState, 
               placeholder="Full name"
             />
             <div className="grid grid-cols-2 gap-4">
-              <Input
-                label="Country"
-                {...register('country')}
+              <CountrySelect
+                register={register}
                 error={errors.country?.message}
-                placeholder="Country"
               />
               <Input
                 label="Address"

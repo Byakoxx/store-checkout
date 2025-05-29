@@ -69,8 +69,7 @@ const CardNumberField = ({
           <img
             src={CARD_LOGOS[cardType] || placeholder}
             alt={cardType}
-            className="absolute right-3 top-1/2 -translate-y-1/2 h-7 w-10 opacity-0 animate-fade-in"
-            style={{ animation: 'fade-in 0.3s forwards' }}
+            className="absolute right-3 top-1/2 -translate-y-1/2 h-7 w-10 transition-opacity duration-300 opacity-100"
             loading="lazy"
             onError={e => { e.currentTarget.src = placeholder; }}
           />
