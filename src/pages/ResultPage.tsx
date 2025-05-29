@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { useDispatch, useSelector } from 'react-redux';
 import { Home, XCircle, CheckCircle2 } from "lucide-react";
@@ -8,29 +9,59 @@ import { Button } from "../components/ui/Button";
 import { reduceStock } from "../features/product/productSlice";
 import placeholder from '../assets/svg/product/placeholder.svg';
 import { clearPaymentForm } from '../features/payment/paymentSlice';
-import { setCurrentStep } from '../features/transaction/transactionSlice';
+import { setCurrentStep, clearTransactionIds } from '../features/transaction/transactionSlice';
+import { checkTransactionStatus } from '../services/transaction.service';
 
 interface ResultPageProps {
   onContinue?: () => void;
+  transactionId?: string;
+  paymentId?: string;
 }
 
-const ResultPage = ({ onContinue }: ResultPageProps) => {
+const ResultPage = ({ onContinue, transactionId, paymentId }: ResultPageProps) => {
   const dispatch = useDispatch();
+  const [status, setStatus] = useState<'PENDING' | 'APPROVED' | 'DECLINED'>('PENDING');
+  const [error, setError] = useState<string | null>(null);
   const isProcessing = useSelector((state: RootState) => state.transaction.isProcessing);
   const product = useSelector((state: RootState) => state.payment.form.product);
-  const result: 'success' | 'error' = 'success';
 
-  dispatch(reduceStock({ productId: product.id, quantity: 1 }));
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+    const checkStatus = async () => {
+      if (!transactionId || !paymentId) return;
+
+      try {
+        const response = await checkTransactionStatus(transactionId, paymentId);
+        setStatus(response.status);
+
+        if (response.status === 'PENDING') {
+          // Check again in 2 seconds if still pending
+          timeoutId = setTimeout(checkStatus, 2000);
+        } else if (response.status === 'APPROVED') {
+          dispatch(reduceStock({ productId: product.id, quantity: 1 }));
+        }
+      } catch (err) {
+        console.error('Error checking transaction status:', err);
+        setError(err instanceof Error ? err.message : 'An error occurred');
+        setStatus('DECLINED');
+      }
+    };
+
+    checkStatus();
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [transactionId, paymentId, dispatch, product]);
 
   const handleContinue = () => {
     dispatch(clearPaymentForm());
     dispatch(setCurrentStep('product'));
+    dispatch(clearTransactionIds());
     if (onContinue) onContinue();
   };
 
-  const isSuccess = result === "success"
-
-  if (isProcessing) {
+  if (isProcessing || status === 'PENDING') {
     return (
       <div className="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center p-4">
         <div className="flex flex-col items-center text-center max-w-md">
@@ -45,6 +76,8 @@ const ResultPage = ({ onContinue }: ResultPageProps) => {
       </div>
     )
   }
+
+  const isSuccess = status === 'APPROVED';
 
   return (
     <div className="fixed inset-0 bg-white z-50 flex flex-col items-center justify-center p-4">
@@ -65,7 +98,7 @@ const ResultPage = ({ onContinue }: ResultPageProps) => {
         <p className="text-gray-600 mb-8">
           {isSuccess
             ? "Your order has been processed correctly. You will receive an email with the details of your purchase."
-            : "An error occurred while processing your payment. Please try again or use another payment method."}
+            : error || "An error occurred while processing your payment. Please try again or use another payment method."}
         </p>
 
         <Button

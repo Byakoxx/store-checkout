@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { FocusTrap } from "focus-trap-react";
 import { useSelector, useDispatch } from "react-redux";
@@ -13,9 +13,10 @@ import { setProcessing } from '../features/transaction/transactionSlice';
 import { createTransaction } from '../services/transaction.service';
 import { tokenizeCard } from "../services/card.service";
 import { setCardToken } from "../features/payment/paymentSlice";
+import { setTransactionIds } from '../features/transaction/transactionSlice';
 
-const BASE_FEE = 5.00;
-const DELIVERY_FEE = 3.00;
+const BASE_FEE = 2000;
+const DELIVERY_FEE = 1800;
 
 interface SummaryBackdropProps {
   onConfirm: () => void;
@@ -27,9 +28,19 @@ interface SummaryBackdropProps {
 
 const SummaryBackdrop = ({ onConfirm, onClose, frontLayerState, onExpand, formData }: SummaryBackdropProps) => {
   const dispatch = useDispatch();
+  const [isLocalProcessing, setIsLocalProcessing] = useState(false);
   const isProcessing = useSelector((state: RootState) => state.transaction.isProcessing);
-  const product = formData?.product;
-  const form = formData || {};
+  const paymentState = useSelector((state: RootState) => state.payment.form as PaymentFlowState);
+
+  // Usar el producto del estado de Redux
+  const product = paymentState.product || formData?.product;
+  const form = { ...paymentState, ...formData } as PaymentFlowState;
+
+  // Agregar logs para debuggear
+  console.log('SummaryBackdrop - formData completo:', formData);
+  console.log('SummaryBackdrop - paymentState:', paymentState);
+  console.log('SummaryBackdrop - product:', product);
+  console.log('SummaryBackdrop - form:', form);
 
   const confirmBtnRef = useRef<HTMLButtonElement>(null);
 
@@ -55,33 +66,58 @@ const SummaryBackdrop = ({ onConfirm, onClose, frontLayerState, onExpand, formDa
   const cardType = detectCardType(form.cardNumber || "");
 
   const handleConfirmClick = async () => {
+    if (isLocalProcessing || isProcessing) return;
+
     try {
+      setIsLocalProcessing(true);
       dispatch(setProcessing(true));
 
-      if (!formData.product) {
+      if (!product) {
         throw new Error('Missing product information');
       }
 
-      // Tokenizar la tarjeta solo cuando el usuario confirma
-      const tokenResponse = await tokenizeCard({
-        cardNumber: formData.cardNumber,
-        expiryDate: formData.expiryDate,
-        cvv: formData.cvv,
-        fullName: formData.fullName,
+      // Usar el estado de Redux para los datos del pago
+      const paymentData = {
+        cardNumber: paymentState.cardNumber.replace(/\s/g, ''),
+        expiryDate: paymentState.expiryDate,
+        cvv: paymentState.cvv,
+        fullName: paymentState.fullName,
+      };
+
+      console.log('Iniciando tokenización...', {
+        ...paymentData,
+        cardNumber: paymentData.cardNumber.replace(/\d(?=\d{4})/g, "*")
       });
+
+      const tokenResponse = await tokenizeCard(paymentData);
+      console.log('Tarjeta tokenizada:', tokenResponse);
 
       dispatch(setCardToken(tokenResponse.data.id));
 
-      // Crear la transacción con el token recién generado
-      await createTransaction(formData, tokenResponse.data.id);
+      console.log('Creando transacción con token:', tokenResponse.data.id);
+      const transactionResponse = await createTransaction(paymentState, tokenResponse.data.id);
+      console.log('Transacción creada:', transactionResponse);
+
+      dispatch(setTransactionIds({
+        transactionId: transactionResponse.id,
+        paymentId: transactionResponse.paymentId
+      }));
+
       onConfirm();
-    } catch (error) {
-      console.error('Transaction error:', error);
-      // Manejar el error apropiadamente
+    } catch (error: any) {
+      console.error('Error en el proceso de pago:', error);
+      const errorMessage = error.message || 'Hubo un error procesando el pago';
+      alert(`Error: ${errorMessage}. Por favor, intenta de nuevo.`);
     } finally {
+      setIsLocalProcessing(false);
       dispatch(setProcessing(false));
     }
   };
+
+  const buttonDisabled = isLocalProcessing || isProcessing;
+  const buttonText = buttonDisabled ? 'Processing payment...' : 'Confirm payment';
+
+  console.log('product', product);
 
   return (
     <FocusTrap active={frontLayerState === 'expanded'}>
@@ -119,7 +155,7 @@ const SummaryBackdrop = ({ onConfirm, onClose, frontLayerState, onExpand, formDa
                 <img
                   src={product?.image || placeholder}
                   alt={product?.name || 'Product'}
-                  className="object-contain"
+                  className="object-cover w-16 h-16"
                   loading="lazy"
                   onError={e => { e.currentTarget.src = placeholder; }}
                 />
@@ -172,15 +208,17 @@ const SummaryBackdrop = ({ onConfirm, onClose, frontLayerState, onExpand, formDa
             </div>
           </div>
         </div>
-        <Button
-          className="w-full py-3 text-lg"
-          onClick={handleConfirmClick}
-          disabled={isProcessing}
-          aria-label="Confirm payment"
-          ref={confirmBtnRef}
-        >
-          {isProcessing ? 'Processing payment...' : 'Confirm payment'}
-        </Button>
+        <div className="pt-4">
+          <Button
+            ref={confirmBtnRef}
+            onClick={handleConfirmClick}
+            className="w-full py-6 text-lg rounded-lg"
+            disabled={buttonDisabled}
+            aria-label="Confirm payment"
+          >
+            {buttonText}
+          </Button>
+        </div>
       </div>
     </FocusTrap>
   );
