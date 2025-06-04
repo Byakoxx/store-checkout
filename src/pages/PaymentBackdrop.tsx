@@ -76,7 +76,7 @@ const PaymentBackdrop = ({ isOpen, onClose, onExited, product, frontLayerState, 
       cvv,
       cardName: data.cardName || ''
     };
-    
+
     dispatch(setPaymentForm(updatedForm));
     onFormChange(updatedForm);
     onContinue();

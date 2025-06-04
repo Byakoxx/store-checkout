@@ -69,7 +69,7 @@ function App() {
   const renderMainContent = () => {
     if (currentStep === 'result') {
       return (
-        <ResultPage 
+        <ResultPage
           onContinue={handleResultContinue}
           transactionId={transactionId || undefined}
           paymentId={paymentId || undefined}

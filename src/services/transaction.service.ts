@@ -12,10 +12,13 @@ interface TransactionResponse {
   items: number;
 }
 
-export const createTransaction = async (formData: PaymentFlowState, paymentToken: string): Promise<TransactionResponse> => {
+export const createTransaction = async (formData: PaymentFlowState, paymentToken: string, amount: number): Promise<TransactionResponse> => {
+
+  console.log('formData', formData);
   const payload = {
     productId: formData.product?.id || 'prod-1',
-    amount: formData.product?.price ?? 100000,
+    amount,
+    vatFee: amount * 0.19,
     currency: 'COP',
     paymentToken,
     customer: {

@@ -62,7 +62,8 @@ const SummaryBackdrop = ({ onConfirm, onClose, frontLayerState, onExpand, formDa
   }, [onClose]);
 
   const basePrice = product?.price || 0;
-  const total = basePrice + BASE_FEE + DELIVERY_FEE;
+  const vatFee = basePrice * 0.19;
+  const total = basePrice + BASE_FEE + DELIVERY_FEE + vatFee;
 
   const cardType = detectCardType(form.cardNumber || "");
 
@@ -96,7 +97,8 @@ const SummaryBackdrop = ({ onConfirm, onClose, frontLayerState, onExpand, formDa
       dispatch(setCardToken(tokenResponse.data.id));
 
       console.log('Creando transacción con token:', tokenResponse.data.id);
-      const transactionResponse = await createTransaction(paymentState, tokenResponse.data.id);
+      const transactionResponse = await createTransaction(paymentState, tokenResponse.data.id, total);
+
       console.log('Transacción creada:', transactionResponse);
 
       dispatch(setTransactionIds({
@@ -183,6 +185,10 @@ const SummaryBackdrop = ({ onConfirm, onClose, frontLayerState, onExpand, formDa
             <div className="flex justify-between">
               <span className="text-sm text-gray-500">Delivery fee:</span>
               <span className="font-semibold text-sm">{formatMoney(DELIVERY_FEE)}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-sm text-gray-500">VAT fee:</span>
+              <span className="font-semibold text-sm">{formatMoney(vatFee)}</span>
             </div>
           </div>
           <div className="flex justify-between font-bold border-t pt-2 mt-2">
